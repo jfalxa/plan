@@ -37,8 +37,7 @@ function Marks( { positions } )
 
 class App extends Component
 {
-    state =
-    {
+    state = {
         mousePosition: [ 0, 0 ],
         markedSpots: []
     }
@@ -53,24 +52,20 @@ class App extends Component
         this.stopListening()
     }
 
-    startListening = () =>
-    {
+    startListening = () => {
         this._moveCallback = e => this.move( e.clientX, e.clientY )
         document.addEventListener( 'mousemove', this._moveCallback )
     }
 
-    stopListening = () =>
-    {
+    stopListening = () => {
         document.removeEventListener( 'mousemove', this._moveCallback )
     }
 
-    move = ( x, y ) =>
-    {
+    move = ( x, y ) => {
         this.setState( { mousePosition: [ x, y ] } )
     }
 
-    mark = () =>
-    {
+    mark = () => {
         const { markedSpots, mousePosition } = this.state
         this.setState( { markedSpots: [...markedSpots, mousePosition] } )
     }
