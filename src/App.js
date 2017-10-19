@@ -45,7 +45,23 @@ class App extends Component
 
     componentDidMount()
     {
-        this.startListening();
+        this.startListening()
+    }
+
+    componentWillUnmount()
+    {
+        this.stopListening()
+    }
+
+    startListening = () =>
+    {
+        this._moveCallback = e => this.move( e.clientX, e.clientY )
+        document.addEventListener( 'mousemove', this._moveCallback )
+    }
+
+    stopListening = () =>
+    {
+        document.removeEventListener( 'mousemove', this._moveCallback )
     }
 
     move = ( x, y ) =>
@@ -57,16 +73,6 @@ class App extends Component
     {
         const { markedSpots, mousePosition } = this.state
         this.setState( { markedSpots: [...markedSpots, mousePosition] } )
-    }
-
-    startListening = () =>
-    {
-        document.addEventListener( 'mousemove', e => this.move( e.clientX, e.clientY ) )
-    }
-
-    stopListening = () =>
-    {
-        document.removeEventListener( 'mousemove' );
     }
 
     render()
