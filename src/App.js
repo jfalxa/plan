@@ -28,11 +28,19 @@ function Indicator( { position } )
     return <i className={ indicator } style={ style } />
 }
 
+function Marks( { positions } )
+{
+    return positions.map(
+        ( position, i ) => <Indicator key={ i } position={ position } />
+    )
+}
+
 class App extends Component
 {
     state =
     {
-        mousePosition: [ 0, 0 ]
+        mousePosition: [ 0, 0 ],
+        markedSpots: []
     }
 
     componentDidMount()
@@ -43,6 +51,12 @@ class App extends Component
     move = ( x, y ) =>
     {
         this.setState( { mousePosition: [ x, y ] } )
+    }
+
+    mark = () =>
+    {
+        const { markedSpots, mousePosition } = this.state
+        this.setState( { markedSpots: [...markedSpots, mousePosition] } )
     }
 
     startListening = () =>
@@ -57,9 +71,12 @@ class App extends Component
 
     render()
     {
+        const { mousePosition, markedSpots } = this.state
+
         return (
-            <div className={app}>
-                <Indicator position={ this.state.mousePosition } />
+            <div className={ app } onClick={ this.mark }>
+                <Indicator position={ mousePosition } />
+                <Marks positions={ markedSpots } />
             </div>
         )
     }
