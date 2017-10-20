@@ -7,7 +7,7 @@ const app = css`
     height: 100%;
 `
 const indicator = css`
-    r: 40;
+    r: 10;
     fill: black;
 `
 const path = css`
@@ -17,13 +17,17 @@ const path = css`
 `
 
 const big = css`
-    r: 60;
+    r: 15;
     fill: red;
 `
 
 const gray = css`
     stroke: lightgray;
     fill: #f5f5f5;
+`
+
+const selection = css`
+    stroke: green;
 `
 
 
@@ -50,7 +54,7 @@ function Marks( { positions } )
 }
 
 
-function Polygon( { points, className } )
+function Polygon( { points, className, onClick } )
 {
     const [first, ...rest] = points;
 
@@ -59,16 +63,22 @@ function Polygon( { points, className } )
 
     return (
         <path
-            onClick={ e => console.log( 'homypoly' ) }
+            onClick={ e => { e.stopPropagation(); onClick && onClick( e ); } }
             className={ className + ' ' + path }
             d={ firstCommand + ' ' + rest + ' Z' } />
     )
 }
 
 
-function PolyList( { polygons } )
+function PolyList( { polygons, onSelect } )
 {
-    return polygons.map( ( poly, i ) => <Polygon key={ i } points={ poly } className={ gray } /> )
+    return polygons.map( ( poly, i ) => (
+        <Polygon
+            key={ i }
+            points={ poly }
+            onClick={ () => onSelect( poly ) }
+            className={ gray } />
+    ))
 }
 
 
@@ -77,6 +87,7 @@ class App extends Component
     state = {
         canEdit: false,
         canClose: false,
+        selected: null,
         mousePosition: [ 0, 0 ],
         markedSpots: [],
         polygons: []
@@ -109,7 +120,10 @@ class App extends Component
     }
 
     toggleEdit = () => {
-        this.setState( { canEdit: !this.state.canEdit } )
+        const canEdit = !this.state.canEdit
+        const selected = canEdit ? null : this.state.selected
+
+        this.setState( { canEdit, selected } )
     }
 
     move = ( x, y ) => {
@@ -119,10 +133,14 @@ class App extends Component
     }
 
     mark = ( e ) => {
-        const { canClose, markedSpots, polygons, mousePosition } = this.state
+        const { canEdit, canClose, markedSpots, polygons, mousePosition } = this.state
 
         // when user clicks on the first point
-        if ( canClose )
+        if ( !canEdit )
+        {
+            this.setState( { selected: null } )
+        }
+        else if ( canClose )
         {
             // actually close the polygon and add it to the collection
             this.setState( { canClose: false, markedSpots: [], polygons: [...polygons, markedSpots] } )
@@ -139,21 +157,30 @@ class App extends Component
         this.setState( { markedSpots: this.state.markedSpots.slice( 0, -1 ) } )
     }
 
+    select = ( polygon ) => {
+        this.setState( { selected: polygon } )
+    }
+
     render()
     {
-        const { canClose, polygons, mousePosition, markedSpots } = this.state
+        const { canEdit, canClose, selected, polygons, mousePosition, markedSpots } = this.state
 
         return (
-            <svg
-                className={ app }
-                onClick={ this.mark }
-                onContextMenu={ this.pop }>
-                <PolyList polygons={ polygons } />
-                <Polygon points={ [...markedSpots, mousePosition] } />
-                <Indicator position={ mousePosition } />
-                <Marks positions={ markedSpots } />
-                { canClose && <BigIndicator position={ markedSpots[0] } /> }
-            </svg>
+            <div className={ app }>
+                <button onClick={ this.toggleEdit }>{ canEdit ? 'MOVE' : 'EDIT' }</button>
+                <svg
+                    width="100%"
+                    height="100%"
+                    onClick={ this.mark }
+                    onContextMenu={ this.pop }>
+                    <PolyList polygons={ polygons } onSelect={this.select}/>
+                    <Polygon points={ [...markedSpots, mousePosition] } />
+                    { selected && <Polygon points={ selected } className={ selection } /> }
+                    { canEdit && <Indicator position={ mousePosition } /> }
+                    { canEdit && <Marks positions={ markedSpots } /> }
+                    { canClose && <BigIndicator position={ markedSpots[0] } /> }
+                </svg>
+            </div>
         )
     }
 }
