@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { css } from 'react-emotion'
-import * as geometry from './geometry'
+import * as geometry from '../utils/geometry'
 
 const app = css`
     width: 100%;
@@ -186,3 +186,4 @@ class App extends Component
 }
 
 export default App
+
