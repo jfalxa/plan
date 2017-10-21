@@ -1,6 +1,7 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
-import EditScene from './EditScene';
+import EditStage from './EditStage';
+import MoveStage from './MoveStage';
 
 
 function App()
@@ -8,11 +9,12 @@ function App()
     return (
 
         <div>
-            <Route path="/edit" component={ EditScene } />
+            <Route path="/" component={ EditStage } />
+            <Route path="/move" component={ MoveStage } />
         </div>
 
     )
 }
 
 
-export default EditScene;
+export default App;

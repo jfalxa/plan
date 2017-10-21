@@ -5,11 +5,18 @@ import {
     scaleAndAdd,
     dot,
     distance,
-    squaredDistance
-} from 'gl-matrix/src/gl-matrix/vec2';
+    squaredDistance,
+    exactEquals
+} from 'gl-matrix/src/gl-matrix/vec2'
 
 
-export const point = fromValues;
+export const point = fromValues
+
+
+export function isFirstPoint( point, polygon )
+{
+    return ( polygon.length > 0 ) && exactEquals( point, polygon[0] )
+}
 
 
 export function vector( origin, destination )
