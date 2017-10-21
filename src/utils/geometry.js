@@ -19,6 +19,37 @@ export function isFirstPoint( point, polygon )
 }
 
 
+export function findEdge( point, polygon )
+{
+    return polygon.findIndex( ( a, i ) => {
+        const b = polygon[( i + 1 ) % polygon.length]
+        return isInSegment( point, [a, b] )
+    } )
+}
+
+
+export function isOnEdge( point, polygon )
+{
+    return findEdge( point, polygon ) >= 0
+}
+
+
+export function findPolygon( point, polygons )
+{
+    return polygons.findIndex( polygon => isOnEdge( point, polygon ) )
+}
+
+
+export function endPolygonWith( point, polygon )
+{
+    const edgeIndex = findEdge( point, polygon )
+    const before = polygon.slice( 0, edgeIndex + 1 )
+    const after = polygon.slice( edgeIndex + 1 )
+
+    return [...after, ...before, point]
+}
+
+
 export function vector( origin, destination )
 {
     return subtract( create(), destination, origin )
@@ -33,11 +64,15 @@ export function isNearby( point, target, radius=10 )
 
 export function isInSegment( point, segment )
 {
+    const THRESHOLD = 5
+
     const am = distance( segment[0], point )
     const mb = distance( point, segment[1] )
     const ab = distance( segment[0], segment[1] )
 
-    return ( am + mb === ab )
+    const difference = ( am + mb ) - ab
+
+    return difference <= THRESHOLD
 }
 
 
