@@ -9,6 +9,7 @@ import {
 
 
 export const point = fromValues
+export const isEqual = exactEquals
 
 
 export function vector( origin, destination )

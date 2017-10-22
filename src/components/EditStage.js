@@ -5,7 +5,7 @@ import withEditStage from './withEditStage';
 import Stage from './Stage'
 import Polygon from './Polygon';
 import { snapToGrid } from '../utils/grid';
-import { isFirstPoint, isOnPolygon } from '../utils/geometry';
+import { isFirstPoint, isOnPolygon, isEqual } from '../utils/geometry';
 
 
 class EditStage extends React.Component
@@ -26,19 +26,24 @@ class EditStage extends React.Component
         this.setState( { points: [...this.state.points, point] } )
     }
 
+    removePoint()
+    {
+        const { points } = this.state
+        this.setState( { points: [...points.slice( 0, points.length-1 )] } )
+    }
+
     editPolygon( index )
     {
         this.setState( { editedPolygon: index } )
     }
 
-    findPolygon( point )
-    {
-        return this.props.polygons.findIndex( polygon => isOnPolygon( point, polygon ) )
-    }
-
     addPolygon( polygon )
     {
-        this.props.addPolygon( polygon )
+        if ( polygon.length >= 2 )
+        {
+            this.props.addPolygon( polygon )
+        }
+
         this.resetStage()
     }
 
@@ -48,15 +53,30 @@ class EditStage extends React.Component
         this.resetStage()
     }
 
+    findPolygon( point )
+    {
+        return this.props.polygons.findIndex( polygon => isOnPolygon( point, polygon ) )
+    }
+
     handleMove = ( e ) => {
         this.setState( { position: snapToGrid( [e.clientX, e.clientY] ) } )
+    }
+
+    handleRightClick = ( e ) => {
+        e.preventDefault()
+        this.removePoint()
     }
 
     handleClick = ( e ) => {
         const { editedPolygon, position, points } = this.state
 
+        // ignore clicking many times in a row at the same position
+        if ( points.length > 0 && isEqual( position, points[points.length-1] ) )
+        {
+            return
+        }
         // if a polygon is being edited and the click is made again on the polygon edge
-        if ( !isNull( editedPolygon ) && isOnPolygon( position, this.props.polygons[editedPolygon] ) )
+        else if ( !isNull( editedPolygon ) && isOnPolygon( position, this.props.polygons[editedPolygon] ) )
         {
             return this.extendPolygon( editedPolygon, [...points, position] )
         }
@@ -93,7 +113,8 @@ class EditStage extends React.Component
             <Stage
                 polygons={ polygons }
                 onClick={ this.handleClick }
-                onMouseMove={ this.handleMove }>
+                onMouseMove={ this.handleMove }
+                onContextMenu={ this.handleRightClick }>
 
                 <Polygon
                     edited={ !canClose }
