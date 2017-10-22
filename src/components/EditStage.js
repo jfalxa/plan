@@ -29,7 +29,15 @@ class EditStage extends React.Component
     removePoint()
     {
         const { points } = this.state
-        this.setState( { points: [...points.slice( 0, points.length-1 )] } )
+
+        if ( points.length === 1 )
+        {
+            this.resetStage()
+        }
+        else
+        {
+            this.setState( { points: [...points.slice( 0, points.length-1 )] } )
+        }
     }
 
     editPolygon( index )
