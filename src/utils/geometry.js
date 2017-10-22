@@ -1,3 +1,4 @@
+import { polygonArea } from 'd3-polygon';
 import {
     create,
     fromValues,
@@ -8,6 +9,12 @@ import {
 
 
 export const point = fromValues
+
+
+export function vector( origin, destination )
+{
+    return subtract( create(), destination, origin )
+}
 
 
 export function isFirstPoint( point, polygon )
@@ -22,77 +29,71 @@ export function isInSegment( point, segment )
     const mb = distance( point, segment[1] )
     const ab = distance( segment[0], segment[1] )
 
-    return ( am + mb ) === ab
+    return ( am + mb ) - ab < 3
 }
 
 
 export function findEdge( point, polygon )
 {
-    return polygon.findIndex( ( a, i ) => {
-        const b = polygon[( i + 1 ) % polygon.length]
-        return isInSegment( point, [a, b] )
-    } )
+    return polygon.findIndex( ( _, i ) => isInSegment( point, edge( i, polygon ) ) )
 }
 
 
-export function isOnEdge( point, polygon )
+export function isOnPolygon( point, polygon )
 {
     return findEdge( point, polygon ) >= 0
 }
 
 
-export function findPolygon( point, polygons )
+function edge( index, polygon )
 {
-    return polygons.findIndex( polygon => isOnEdge( point, polygon ) )
+    return [polygon[index], polygon[(index+1) % polygon.length]]
 }
 
 
-// check where b starts and ends on a and use it to learn wether b has to be
-// applied using the same order (clockwise or not)
-export function hasSameOrder( a, b )
+function findPath( point, polygon )
+{
+    let i = 0
+    let path = []
+
+    while( !isInSegment( point, edge( i, polygon ) ) )
+    {
+        path.push( polygon[i] )
+        i++
+    }
+
+    return [...path, polygon[i]]
+}
+
+
+// meeeeeh this algorithm is still missing something
+// it looks like it doesn't bug right now but i'm sure it won't forever
+export function combinePolygons( a, b )
 {
     const first = b[0]
-    const last = b[b.length - 1]
+    const last = b[b.length-1]
 
     const firstEdge = findEdge( first, a )
     const lastEdge = findEdge( last, a )
 
-    return ( firstEdge === lastEdge )
-        // if b's bounds are on the same edge of a, check which one is closer
-        // to the first bound of this edge
-        ? distance( a[firstEdge], first ) < distance( a[lastEdge], last )
-        // otherwise simply check if the first is on an earlier edge of a than the last
-        : firstEdge < lastEdge
-}
+    const hasSameEdge = ( firstEdge === lastEdge )
 
+    const points = [...a.slice( firstEdge + 1 ), ...a.slice( 0, firstEdge + 1 )]
 
-export function cutPolygon( a, b )
-{
-    const beforeIndex = findEdge( b[0], a )
-    const afterIndex = findEdge( b[b.length-1], a ) + 1
+    const path = findPath( last, points )
+    const reversePath = !hasSameEdge
+        ? findPath( last, points.reverse() )
+        : []
 
-    const before = a.slice( 0, beforeIndex + 1 )
-    const after = a.slice( afterIndex )
+    const pathArea = polygonArea( [...path, ...b.reverse()] )
+    const reversePathArea = polygonArea( [...reversePath, ...b.reverse()] )
 
-    return [before, after]
-}
+    const longerPath = Math.abs( pathArea ) > Math.abs( reversePathArea )
+        ? path
+        : reversePath
 
-
-export function combinePolygons( a, b )
-{
-    if ( !hasSameOrder( a, b ) )
-    {
-        b.reverse()
-    }
-
-    const [before, after] = cutPolygon( a, b )
-
-    return [...before, ...b, ...after]
-}
-
-
-export function vector( origin, destination )
-{
-    return subtract( create(), destination, origin )
+    return ( hasSameEdge && ( longerPath.length === 0 || distance( first, longerPath[0] ) > distance( last, longerPath[0] ) ) )
+        ? [...longerPath, ...b]
+        : [...longerPath, ...b.reverse()]
 }
 

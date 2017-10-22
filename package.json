@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "d3-polygon": "^1.0.3",
     "emotion": "^8.0.8",
     "gl-matrix": "^2.4.0",
     "immutability-helper": "^2.4.0",

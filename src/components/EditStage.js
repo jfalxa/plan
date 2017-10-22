@@ -5,7 +5,7 @@ import withEditStage from './withEditStage';
 import Stage from './Stage'
 import Polygon from './Polygon';
 import { snapToGrid } from '../utils/grid';
-import { isFirstPoint, isOnEdge, findPolygon } from '../utils/geometry';
+import { isFirstPoint, isOnPolygon } from '../utils/geometry';
 
 
 class EditStage extends React.Component
@@ -31,6 +31,11 @@ class EditStage extends React.Component
         this.setState( { editedPolygon: index } )
     }
 
+    findPolygon( point )
+    {
+        return this.props.polygons.findIndex( polygon => isOnPolygon( point, polygon ) )
+    }
+
     addPolygon( polygon )
     {
         this.props.addPolygon( polygon )
@@ -48,11 +53,10 @@ class EditStage extends React.Component
     }
 
     handleClick = ( e ) => {
-        const { polygons } = this.props
         const { editedPolygon, position, points } = this.state
 
         // if a polygon is being edited and the click is made again on the polygon edge
-        if ( !isNull( editedPolygon ) && isOnEdge( position, polygons[editedPolygon] ) )
+        if ( !isNull( editedPolygon ) && isOnPolygon( position, this.props.polygons[editedPolygon] ) )
         {
             return this.extendPolygon( editedPolygon, [...points, position] )
         }
@@ -68,7 +72,7 @@ class EditStage extends React.Component
         }
 
         // check if we try to edit an existing polygon
-        const index = findPolygon( position, polygons )
+        const index = this.findPolygon( position )
 
         // if so, start editing this polygon
         if ( index >= 0 )
@@ -95,6 +99,8 @@ class EditStage extends React.Component
                     edited={ !canClose }
                     highlighted={ canClose }
                     points={ [...points, position] } />
+
+                <circle r={ 5 } cx={ position[0] } cy={ position[1] } />
 
             </Stage>
         )
