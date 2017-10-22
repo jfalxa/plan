@@ -1,4 +1,4 @@
-export function toPath( [first, ...rest] )
+export function toPath( [first, ...rest], open )
 {
     if ( !first )
     {
@@ -8,6 +8,6 @@ export function toPath( [first, ...rest] )
     const firstCommand = `M${ first[0] } ${ first[1] }`
     const restCommands = rest.map( point => `L${ point[0] } ${ point[1] }` )
 
-    return `${ firstCommand } ${ restCommands } Z`
+    return `${ firstCommand } ${ restCommands } ${ open ? '' : 'Z' }`
 }
 

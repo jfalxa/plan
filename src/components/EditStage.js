@@ -5,7 +5,7 @@ import withEditStage from './withEditStage';
 import Stage from './Stage'
 import Polygon from './Polygon';
 import { snapToGrid } from '../utils/grid';
-import { isFirstPoint, endPolygonWith, findPolygon } from '../utils/geometry';
+import { isFirstPoint, isOnEdge, findPolygon } from '../utils/geometry';
 
 
 class EditStage extends React.Component
@@ -26,12 +26,9 @@ class EditStage extends React.Component
         this.setState( { points: [...this.state.points, point] } )
     }
 
-    editPolygon( index, point )
+    editPolygon( index )
     {
-        // recreate an array of point based on the edited polygon, ordered in a
-        // way that the last one is the one closer to the point being added here
-        const polygon = endPolygonWith( point, this.props.polygons[index] )
-        this.setState( { editedPolygon: index, points: polygon } )
+        this.setState( { editedPolygon: index } )
     }
 
     addPolygon( polygon )
@@ -40,9 +37,9 @@ class EditStage extends React.Component
         this.resetStage()
     }
 
-    replacePolygon( index, polygon )
+    extendPolygon( index, points )
     {
-        this.props.replacePolygon( index, polygon )
+        this.props.extendPolygon( index, points )
         this.resetStage()
     }
 
@@ -54,12 +51,15 @@ class EditStage extends React.Component
         const { polygons } = this.props
         const { editedPolygon, position, points } = this.state
 
-        // if the click is on the starting point, close the polygon
-        if ( isFirstPoint( position, points ) )
+        // if a polygon is being edited and the click is made again on the polygon edge
+        if ( !isNull( editedPolygon ) && isOnEdge( position, polygons[editedPolygon] ) )
         {
-            return isNull( editedPolygon )
-                ? this.addPolygon( points )
-                : this.replacePolygon( editedPolygon, points )
+            return this.extendPolygon( editedPolygon, [...points, position] )
+        }
+        // if the click is on the starting point, close the polygon
+        else if ( isFirstPoint( position, points ) )
+        {
+            return this.addPolygon( points )
         }
         // or simply add a new point to the current polygon
         else if ( points.length > 0 )
@@ -71,11 +71,12 @@ class EditStage extends React.Component
         const index = findPolygon( position, polygons )
 
         // if so, start editing this polygon
-        // otherwise, add a new point
-        return ( index >= 0 )
-            ? this.editPolygon( index, position )
-            : this.addPoint( position )
+        if ( index >= 0 )
+        {
+            this.editPolygon( index )
+        }
 
+        this.addPoint( position )
     }
 
     render()
@@ -92,7 +93,7 @@ class EditStage extends React.Component
 
                 <Polygon
                     edited={ !canClose }
-                    selected={ canClose }
+                    highlighted={ canClose }
                     points={ [...points, position] } />
 
             </Stage>

@@ -2,10 +2,7 @@ import {
     create,
     fromValues,
     subtract,
-    scaleAndAdd,
-    dot,
     distance,
-    squaredDistance,
     exactEquals
 } from 'gl-matrix/src/gl-matrix/vec2'
 
@@ -16,6 +13,16 @@ export const point = fromValues
 export function isFirstPoint( point, polygon )
 {
     return ( polygon.length > 0 ) && exactEquals( point, polygon[0] )
+}
+
+
+export function isInSegment( point, segment )
+{
+    const am = distance( segment[0], point )
+    const mb = distance( point, segment[1] )
+    const ab = distance( segment[0], segment[1] )
+
+    return ( am + mb ) === ab
 }
 
 
@@ -40,73 +47,52 @@ export function findPolygon( point, polygons )
 }
 
 
-export function endPolygonWith( point, polygon )
+// check where b starts and ends on a and use it to learn wether b has to be
+// applied using the same order (clockwise or not)
+export function hasSameOrder( a, b )
 {
-    const edgeIndex = findEdge( point, polygon )
-    const before = polygon.slice( 0, edgeIndex + 1 )
-    const after = polygon.slice( edgeIndex + 1 )
+    const first = b[0]
+    const last = b[b.length - 1]
 
-    return [...after, ...before, point]
+    const firstEdge = findEdge( first, a )
+    const lastEdge = findEdge( last, a )
+
+    return ( firstEdge === lastEdge )
+        // if b's bounds are on the same edge of a, check which one is closer
+        // to the first bound of this edge
+        ? distance( a[firstEdge], first ) < distance( a[lastEdge], last )
+        // otherwise simply check if the first is on an earlier edge of a than the last
+        : firstEdge < lastEdge
+}
+
+
+export function cutPolygon( a, b )
+{
+    const beforeIndex = findEdge( b[0], a )
+    const afterIndex = findEdge( b[b.length-1], a ) + 1
+
+    const before = a.slice( 0, beforeIndex + 1 )
+    const after = a.slice( afterIndex )
+
+    return [before, after]
+}
+
+
+export function combinePolygons( a, b )
+{
+    if ( !hasSameOrder( a, b ) )
+    {
+        b.reverse()
+    }
+
+    const [before, after] = cutPolygon( a, b )
+
+    return [...before, ...b, ...after]
 }
 
 
 export function vector( origin, destination )
 {
     return subtract( create(), destination, origin )
-}
-
-
-export function isNearby( point, target, radius=10 )
-{
-    return distance( point, target ) <= radius
-}
-
-
-export function isInSegment( point, segment )
-{
-    const THRESHOLD = 5
-
-    const am = distance( segment[0], point )
-    const mb = distance( point, segment[1] )
-    const ab = distance( segment[0], segment[1] )
-
-    const difference = ( am + mb ) - ab
-
-    return difference <= THRESHOLD
-}
-
-
-// point is m, segment is ab
-export function distanceToSegment( m, [a, b] )
-{
-    // i.e. |b-a|^2
-    const dist2 = squaredDistance( a, b )
-
-    // when a = b
-    if ( dist2 === 0 )
-    {
-        return distance( m, a )
-    }
-
-    const am = vector( a, m )
-    const ab = vector( a, b )
-
-    // Consider the line extending the segment, parameterized as a + t (b - a).
-    // We find projection of point p onto the line.
-    // It falls where t = [(m-a) . (b-a)] / |b-a|^2
-    // We clamp t from [0,1] to handle points outside the segment ab.
-    const baseT = dot( am, ab ) / dist2
-    const t = Math.max( 0, Math.min( 1, baseT ) )
-
-    // a + t * (b - a)
-    const projection = scaleAndAdd( create(), a, ab, t )
-
-    return distance( m, projection );
-}
-
-
-export function isNearbySegment( point, segment, radius=10 )
-{
-    return distanceToSegment( point, segment ) <= radius
 }
 

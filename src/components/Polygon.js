@@ -11,24 +11,25 @@ const polygon = css`
 
 const editedClass = css`
     stroke: red
+    fill: transparent
 `
 
-const selectedClass = css`
+const highlightedClass = css`
     stroke: green
 `
 
 
-function Polygon( { points, edited, selected } )
+function Polygon( { points, edited, highlighted } )
 {
     const classNames = cx(
         polygon,
         { [editedClass]: edited },
-        { [selectedClass]: selected }
+        { [highlightedClass]: highlighted }
     )
 
     return (
         <path
-            d={ toPath( points ) }
+            d={ toPath( points, edited ) }
             className={ classNames } />
     )
 }
