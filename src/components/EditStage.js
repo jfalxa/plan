@@ -105,12 +105,13 @@ class EditStage extends React.Component
 
     render()
     {
-        const { points, position } = this.state
+        const { points, position, editedPolygon } = this.state
         const { polygons } = this.props
         const canClose = isFirstPoint( position, points )
 
         return (
             <Stage
+                highlighted={ editedPolygon }
                 polygons={ polygons }
                 onClick={ this.handleClick }
                 onMouseMove={ this.handleMove }

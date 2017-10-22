@@ -14,8 +14,7 @@ export const isEqual = exactEquals
 
 export function vector( origin, destination )
 {
-    return subtract( create(), destination, origin )
-}
+    return subtract( create(), destination, origin ) }
 
 
 export function isFirstPoint( point, polygon )
@@ -68,7 +67,7 @@ function findPath( point, polygon )
 
 
 // meeeeeh this algorithm is still missing something
-// it looks like it doesn't bug right now but i'm sure it won't forever
+// BUG: when drawing a triangle starting from the first polygon point to the second
 export function combinePolygons( a, b )
 {
     const first = b[0]
