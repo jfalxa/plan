@@ -1,4 +1,4 @@
-import { polygonArea } from 'd3-polygon';
+import { polygonArea } from 'd3-polygon'
 import {
     create,
     fromValues,
@@ -78,8 +78,10 @@ export function combinePolygons( a, b )
 
     const hasSameEdge = ( firstEdge === lastEdge )
 
+    // reorganize a's points so they begin with the point closer to first
     const points = [...a.slice( firstEdge + 1 ), ...a.slice( 0, firstEdge + 1 )]
 
+    // find the two paths that connect first to last on a
     const path = findPath( last, points )
     const reversePath = !hasSameEdge
         ? findPath( last, points.reverse() )
@@ -88,10 +90,12 @@ export function combinePolygons( a, b )
     const pathArea = polygonArea( [...path, ...b.reverse()] )
     const reversePathArea = polygonArea( [...reversePath, ...b.reverse()] )
 
+    // only keep the one that generates the bigger polygon
     const longerPath = Math.abs( pathArea ) > Math.abs( reversePathArea )
         ? path
         : reversePath
 
+    // when both points are on the same edge, check which one is closer to the first point
     return ( hasSameEdge && ( longerPath.length === 0 || distance( first, longerPath[0] ) > distance( last, longerPath[0] ) ) )
         ? [...longerPath, ...b]
         : [...longerPath, ...b.reverse()]

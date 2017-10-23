@@ -1,7 +1,7 @@
-import React from 'react';
-import { Route } from 'react-router-dom';
-import EditStage from './EditStage';
-import MoveStage from './MoveStage';
+import React from 'react'
+import { Route } from 'react-router-dom'
+import EditStage from './EditStage'
+import MoveStage from './MoveStage'
 
 
 function App()
@@ -17,4 +17,4 @@ function App()
 }
 
 
-export default App;
+export default App

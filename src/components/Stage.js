@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'react-emotion'
 
-import Polygon from './Polygon';
+import Polygon from './Polygon'
 
 
 const StageContainer = styled( 'svg' )`

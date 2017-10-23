@@ -1,11 +1,11 @@
 import React from 'react'
-import isNull from 'lodash/isNull';
+import isNull from 'lodash/isNull'
 
-import withEditStage from './withEditStage';
+import withEditStage from './withEditStage'
 import Stage from './Stage'
-import Polygon from './Polygon';
-import { snapToGrid } from '../utils/grid';
-import { isFirstPoint, isOnPolygon, isEqual } from '../utils/geometry';
+import Polygon from './Polygon'
+import { snapToGrid } from '../utils/grid'
+import { isFirstPoint, isOnPolygon, isEqual } from '../utils/geometry'
 
 
 class EditStage extends React.Component
