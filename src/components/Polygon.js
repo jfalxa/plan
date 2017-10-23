@@ -28,9 +28,9 @@ function Polygon( { points, opened, edited, highlighted, ...pathProps } )
 {
     const classNames = cx(
         polygon,
+        { [openedClass]: opened },
         { [editedClass]: edited },
-        { [highlightedClass]: highlighted },
-        { [openedClass]: opened }
+        { [highlightedClass]: highlighted }
     )
 
     return (
