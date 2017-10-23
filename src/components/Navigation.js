@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'react-emotion'
 import { Link, withRouter } from 'react-router-dom'
 
-import help from '../utils/help'
+import help from '../help'
 
 const NavContainer = styled( 'nav' )`
     position: absolute;
