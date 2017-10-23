@@ -8,12 +8,12 @@ export function isEqual( a, b )
 
 export function move( a, b )
 {
-    return [[a[0] + b[0]], [a[1] + b[1]]]
+    return [a[0] + b[0], a[1] + b[1]]
 }
 
 export function subtract( origin, destination )
 {
-    return [[destination[0] - origin[0]], [destination[1] - origin[1]]]
+    return [destination[0] - origin[0], destination[1] - origin[1]]
 }
 
 export function distance( origin, destination )
