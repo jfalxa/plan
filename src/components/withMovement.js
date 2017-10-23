@@ -7,9 +7,7 @@ function withMovement( Component )
 {
     return class MovementComponent extends React.Component
     {
-        state = {
-            position: [0, 0]
-        }
+        position = [0, 0]
 
         startListening( onMove, onMoveEnd )
         {
@@ -28,12 +26,12 @@ function withMovement( Component )
 
         handleMoveStart = ( onMove, onMoveEnd ) => ( e ) => {
             this.startListening( onMove, onMoveEnd )
-            this.setState( { position: [e.clientX, e.clientY] } )
+            this.position = [e.clientX, e.clientY]
         }
 
         handleMove = ( e ) => {
             e.stopPropagation()
-            const delta = subtract( this.state.position, [e.clientX, e.clientY]  )
+            const delta = subtract( this.position, [e.clientX, e.clientY]  )
             this._onMove( e, delta )
         }
 

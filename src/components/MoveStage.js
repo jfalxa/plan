@@ -12,10 +12,6 @@ class MoveStage extends React.Component
         editedPolygon: null
     }
 
-    resetStage = ( e ) => {
-        this.setState( { editedPolygon: null } )
-    }
-
     selectPolygon = ( index ) => {
         this.setState( { editedPolygon: index } )
     }
