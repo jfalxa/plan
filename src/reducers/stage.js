@@ -1,11 +1,12 @@
-import update from 'immutability-helper';
-import { createAction, handleActions } from 'redux-actions';
+import update from 'immutability-helper'
+import { createAction, handleActions } from 'redux-actions'
 
-import { combinePolygons } from '../utils/geometry';
+import { combinePolygons } from '../utils/geometry'
 
 
 export const addPolygon = createAction( 'ADD_POLYGON' )
 export const extendPolygon = createAction( 'EXTEND_POLYGON', ( index, points ) => [index, points] )
+export const replacePolygon = createAction( 'EXTEND_POLYGON', ( index, polygon ) => [index, polygon] )
 
 
 function handleAddPolygon( state, action )
@@ -25,6 +26,15 @@ function handleExtendPolygon( state, action )
     } )
 }
 
+function handleReplacePolygon( state, action )
+{
+    const [index, polygon] = action.payload
+
+    return update( state, {
+        polygons: { $splice: [[index, 1, polygon]] }
+    } )
+}
+
 
 const initialState =
 {
@@ -34,7 +44,8 @@ const initialState =
 const reducerMap =
 {
     [addPolygon]: handleAddPolygon,
-    [extendPolygon]: handleExtendPolygon
+    [extendPolygon]: handleExtendPolygon,
+    [replacePolygon]: handleReplacePolygon
 }
 
 export default handleActions( reducerMap, initialState )
