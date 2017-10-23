@@ -117,10 +117,8 @@ class EditStage extends React.Component
         const index = this.findPolygon( position )
 
         // if so, start editing this polygon
-        if ( index >= 0 )
-        {
-            editPolygon( index )
-        }
+        // otherwise reset selection
+        editPolygon( index >= 0 ? index : null )
 
         this.addPoint( position )
     }
