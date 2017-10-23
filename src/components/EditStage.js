@@ -98,7 +98,7 @@ class EditStage extends React.Component
         const { editedPolygon, position, points } = this.state
 
         // ignore clicking many times in a row at the same position
-        if ( !position || points.length > 0 && isEqual( position, points[points.length-1] ) )
+        if ( !position || ( points.length > 0 && isEqual( position, points[points.length-1] ) ) )
         {
             return
         }

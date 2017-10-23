@@ -6,7 +6,7 @@ import { combinePolygons } from '../utils/geometry'
 
 export const addPolygon = createAction( 'ADD_POLYGON' )
 export const extendPolygon = createAction( 'EXTEND_POLYGON', ( index, points ) => [index, points] )
-export const replacePolygon = createAction( 'EXTEND_POLYGON', ( index, polygon ) => [index, polygon] )
+export const replacePolygon = createAction( 'REPLACE_POLYGON', ( index, polygon ) => [index, polygon] )
 
 
 function handleAddPolygon( state, action )
