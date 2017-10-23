@@ -60,7 +60,7 @@ class PolygonControl extends React.Component
     }
 
     handleMoveEnd = ( e ) => {
-        this.props.onChange( this.state.points )
+        this.props.onChange( this.state.points, e.ctrlKey )
     }
 
     render()

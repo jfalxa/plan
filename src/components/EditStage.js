@@ -14,13 +14,12 @@ class EditStage extends React.Component
 {
     state = {
         position: null,
-        points: [],
-        editedPolygon: null
+        points: []
     }
 
     resetStage()
     {
-        this.setState( { points: [], editedPolygon: null } )
+        this.setState( { points: [] } )
     }
 
     addPoint( point )
@@ -40,11 +39,6 @@ class EditStage extends React.Component
         {
             this.setState( { points: [...points.slice( 0, points.length-1 )] } )
         }
-    }
-
-    editPolygon( index )
-    {
-        this.setState( { editedPolygon: index } )
     }
 
     addPolygon( polygon )
@@ -95,7 +89,8 @@ class EditStage extends React.Component
     }
 
     handleClick = ( e ) => {
-        const { editedPolygon, position, points } = this.state
+        const { editedPolygon, editPolygon } = this.props
+        const { position, points } = this.state
 
         // ignore clicking many times in a row at the same position
         if ( !position || ( points.length > 0 && isEqual( position, points[points.length-1] ) ) )
@@ -124,7 +119,7 @@ class EditStage extends React.Component
         // if so, start editing this polygon
         if ( index >= 0 )
         {
-            this.editPolygon( index )
+            editPolygon( index )
         }
 
         this.addPoint( position )
@@ -132,8 +127,8 @@ class EditStage extends React.Component
 
     render()
     {
-        const { points, position, editedPolygon } = this.state
-        const { polygons } = this.props
+        const { points, position } = this.state
+        const { editedPolygon, polygons } = this.props
         const canClose = isFirstPoint( position, points )
 
         return (

@@ -8,28 +8,23 @@ import withMoveStage from './withMoveStage'
 
 class MoveStage extends React.Component
 {
-    state = {
-        editedPolygon: null
-    }
+    updatePolygon = ( polygon, create ) => {
+        const { editedPolygon, addPolygon, replacePolygon } = this.props
 
-    selectPolygon = ( index ) => {
-        this.setState( { editedPolygon: index } )
-    }
-
-    updatePolygon = ( polygon ) => {
-        this.props.replacePolygon( this.state.editedPolygon, polygon )
+        return create
+            ? addPolygon( polygon )
+            : replacePolygon( editedPolygon, polygon )
     }
 
     render()
     {
-        const { editedPolygon } = this.state
-        const { polygons } = this.props
+        const { polygons, editedPolygon, editPolygon } = this.props
 
         return (
             <Stage
                 edited={ editedPolygon }
                 polygons={ polygons }
-                onSelect={ this.selectPolygon }>
+                onSelect={ editPolygon }>
 
                 { !isNull( editedPolygon ) && (
                     <PolygonControl
