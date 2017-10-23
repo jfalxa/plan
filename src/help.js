@@ -2,7 +2,7 @@ function help()
 {
     alert(`
 # ALL
-- press space bar to switch between modes
+- press SPACE to switch between modes
 
 # EDIT
 - click on an empty space to start a new polygon
@@ -14,6 +14,7 @@ function help()
 # MOVE
 - click on a polygon to select it
 - drag a selected polygon to move it on the stage
+- drag a selected polygon while holding CTRL to create a copy
 - drag a selected polygon's point to change its position
     `)
 }
