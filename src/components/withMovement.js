@@ -1,10 +1,16 @@
 import React from 'react'
 
+import { vector } from '../utils/geometry'
+
 
 function withMovement( Component )
 {
     return class MovementComponent extends React.Component
     {
+        state = {
+            position: [0, 0]
+        }
+
         startListening( onMove, onMoveEnd )
         {
             this._onMove = onMove
@@ -22,11 +28,13 @@ function withMovement( Component )
 
         handleMoveStart = ( onMove, onMoveEnd ) => ( e ) => {
             this.startListening( onMove, onMoveEnd )
+            this.setState( { position: [e.clientX, e.clientY] } )
         }
 
         handleMove = ( e ) => {
             e.stopPropagation()
-            this._onMove( e )
+            const delta = vector( this.state.position, [e.clientX, e.clientY]  )
+            this._onMove( e, delta )
         }
 
         handleMoveEnd = ( e ) => {

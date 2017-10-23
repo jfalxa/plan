@@ -1,5 +1,6 @@
 import { polygonArea } from 'd3-polygon'
 import {
+    add,
     create,
     fromValues,
     subtract,
@@ -14,7 +15,14 @@ export const isEqual = exactEquals
 
 export function vector( origin, destination )
 {
-    return subtract( create(), destination, origin ) }
+    return subtract( create(), destination, origin )
+}
+
+
+export function move( point, translation )
+{
+    return add( create(), point, translation )
+}
 
 
 export function isFirstPoint( point, polygon )

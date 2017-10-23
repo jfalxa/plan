@@ -1,9 +1,11 @@
 import React from 'react'
 import isNull from 'lodash/isNull'
+import flatMap from 'lodash/flatMap';
 
 import withEditStage from './withEditStage'
 import Stage from './Stage'
 import Polygon from './Polygon'
+import Point from './Point'
 import { snapToGrid } from '../utils/grid'
 import { isFirstPoint, isOnPolygon, isEqual } from '../utils/geometry'
 
@@ -11,7 +13,7 @@ import { isFirstPoint, isOnPolygon, isEqual } from '../utils/geometry'
 class EditStage extends React.Component
 {
     state = {
-        position: [0, 0],
+        position: null,
         points: [],
         editedPolygon: null
     }
@@ -61,6 +63,18 @@ class EditStage extends React.Component
         this.resetStage()
     }
 
+    removePolygonPoint( polygonIndex, pointIndex )
+    {
+        const polygon = this.props.polygons[polygonIndex]
+        const modifiedPolygon =
+        [
+            ...polygon.slice( 0, pointIndex ),
+            ...polygon.slice( pointIndex + 1 )
+        ]
+
+        this.props.replacePolygon( polygonIndex, modifiedPolygon )
+    }
+
     findPolygon( point )
     {
         return this.props.polygons.findIndex( polygon => isOnPolygon( point, polygon ) )
@@ -75,11 +89,16 @@ class EditStage extends React.Component
         this.removePoint()
     }
 
+    handlePointRightClick = ( polygonIndex, pointIndex ) => ( e ) => {
+        e.preventDefault()
+        this.removePolygonPoint( polygonIndex, pointIndex )
+    }
+
     handleClick = ( e ) => {
         const { editedPolygon, position, points } = this.state
 
         // ignore clicking many times in a row at the same position
-        if ( points.length > 0 && isEqual( position, points[points.length-1] ) )
+        if ( !position || points.length > 0 && isEqual( position, points[points.length-1] ) )
         {
             return
         }
@@ -131,7 +150,16 @@ class EditStage extends React.Component
                     highlighted={ canClose }
                     points={ [...points, position] } />
 
-                <circle r={ 5 } cx={ position[0] } cy={ position[1] } />
+                { position && <Point position={ position } /> }
+
+                { flatMap( polygons, ( polygon, polygonIndex ) => polygon.map( ( point, pointIndex ) => (
+                    <Point
+                        key={ polygonIndex + '_' + pointIndex }
+                        position={ point }
+                        fill="red"
+                        onContextMenu={ this.handlePointRightClick( polygonIndex, pointIndex ) } />
+                ) ) ) }
+
 
             </Stage>
         )

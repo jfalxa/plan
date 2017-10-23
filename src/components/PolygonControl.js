@@ -1,16 +1,24 @@
 import React from 'react'
 
 import Polygon from './Polygon'
+import Point from './Point'
 import withMovement from './withMovement'
+import { move } from '../utils/geometry'
 import { snapToGrid } from '../utils/grid'
 
 
 const PointControl = withMovement( ( { position, movement, onMove, onMoveEnd } ) => (
-    <circle
-        r="5"
-        fill="red"
-        cx={ position[0] }
-        cy={ position[1] }
+    <Point
+        fill="green"
+        position={ position }
+        onMouseDown={ movement( onMove, onMoveEnd ) } />
+) )
+
+
+const PositionControl = withMovement( ( { points, movement, onMove, onMoveEnd } ) => (
+    <Polygon
+        highlighted
+        points={ points }
         onMouseDown={ movement( onMove, onMoveEnd ) } />
 ) )
 
@@ -32,7 +40,15 @@ class PolygonControl extends React.Component
         }
     }
 
-    handleMove = ( index ) => ( e ) => {
+    handleMove = ( e, delta ) => {
+        const points = this.props.points.map(
+            point => move( point, snapToGrid( delta ) )
+        )
+
+        this.setState( { points } )
+    }
+
+    handleMovePoint = ( index ) => ( e ) => {
         const points =
         [
             ...this.state.points.slice( 0, index ),
@@ -53,12 +69,16 @@ class PolygonControl extends React.Component
 
         return (
             <g>
-                <Polygon highlighted points={ points } />
+                <PositionControl
+                    points={ points }
+                    onMove={ this.handleMove }
+                    onMoveEnd={ this.handleMoveEnd } />
+
                 { points.map( ( point, i ) => (
                     <PointControl
                         key={ i }
                         position={ point }
-                        onMove={ this.handleMove( i ) }
+                        onMove={ this.handleMovePoint( i ) }
                         onMoveEnd={ this.handleMoveEnd } />
                 ) ) }
             </g>

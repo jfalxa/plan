@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import { addPolygon, extendPolygon } from '../reducers/stage'
+import { addPolygon, replacePolygon, extendPolygon } from '../reducers/stage'
 
 
 function mapStateToProps( state )
@@ -10,7 +10,8 @@ function mapStateToProps( state )
 const actionCreators =
 {
     addPolygon,
-    extendPolygon
+    extendPolygon,
+    replacePolygon
 }
 
 

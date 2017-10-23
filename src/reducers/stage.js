@@ -30,8 +30,13 @@ function handleReplacePolygon( state, action )
 {
     const [index, polygon] = action.payload
 
+    // if there is no replacement polygon or if it's empty, remove it
+    const spliceArgs = ( !polygon || polygon.length === 0 )
+        ? [index, 1]
+        : [index, 1, polygon]
+
     return update( state, {
-        polygons: { $splice: [[index, 1, polygon]] }
+        polygons: { $splice: [spliceArgs] }
     } )
 }
 

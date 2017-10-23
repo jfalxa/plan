@@ -38,7 +38,7 @@ class Stage extends React.Component
                         index={ i }
                         highlighted={ i === highlighted }
                         points={ polygon }
-                        onClick={ this.handleSelectPolygon( i ) } />
+                        onMouseDown={ this.handleSelectPolygon( i ) } />
                 ) ) }
                 { children }
             </StageContainer>
