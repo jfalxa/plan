@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { vector } from '../utils/geometry'
+import { subtract } from '../utils/geometry'
 
 
 function withMovement( Component )
@@ -33,7 +33,7 @@ function withMovement( Component )
 
         handleMove = ( e ) => {
             e.stopPropagation()
-            const delta = vector( this.state.position, [e.clientX, e.clientY]  )
+            const delta = subtract( this.state.position, [e.clientX, e.clientY]  )
             this._onMove( e, delta )
         }
 

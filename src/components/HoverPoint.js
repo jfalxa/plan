@@ -1,5 +1,5 @@
 import React from 'react';
-import styled, { css } from 'react-emotion'
+import styled from 'react-emotion'
 
 
 export function Point( { position, color, ...circleProps } )

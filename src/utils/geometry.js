@@ -1,33 +1,32 @@
 import { polygonArea } from 'd3-polygon'
-import {
-    add,
-    create,
-    fromValues,
-    subtract,
-    distance,
-    exactEquals
-} from 'gl-matrix/src/gl-matrix/vec2'
 
 
-export const point = fromValues
-export const isEqual = exactEquals
-
-
-export function vector( origin, destination )
+export function isEqual( a, b )
 {
-    return subtract( create(), destination, origin )
+    return ( a[0] === b[0] ) && ( a[1] === b[1] )
 }
 
-
-export function move( point, translation )
+export function move( a, b )
 {
-    return add( create(), point, translation )
+    return [[a[0] + b[0]], [a[1] + b[1]]]
+}
+
+export function subtract( origin, destination )
+{
+    return [[destination[0] - origin[0]], [destination[1] - origin[1]]]
+}
+
+export function distance( origin, destination )
+{
+    const delta = subtract( origin, destination )
+
+    return Math.sqrt( delta[0]*delta[0] + delta[1]*delta[1] )
 }
 
 
 export function isFirstPoint( point, polygon )
 {
-    return ( polygon.length > 0 ) && exactEquals( point, polygon[0] )
+    return ( polygon.length > 0 ) && isEqual( point, polygon[0] )
 }
 
 
