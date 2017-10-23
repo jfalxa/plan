@@ -5,7 +5,7 @@ import flatMap from 'lodash/flatMap';
 import withEditStage from './withEditStage'
 import Stage from './Stage'
 import Polygon from './Polygon'
-import Point from './Point'
+import HoverPoint, { Point } from './HoverPoint'
 import { snapToGrid } from '../utils/grid'
 import { isFirstPoint, isOnPolygon, isEqual } from '../utils/geometry'
 
@@ -138,25 +138,24 @@ class EditStage extends React.Component
 
         return (
             <Stage
-                edited
-                highlighted={ editedPolygon }
+                edited={ editedPolygon }
                 polygons={ polygons }
                 onClick={ this.handleClick }
                 onMouseMove={ this.handleMove }
                 onContextMenu={ this.handleRightClick }>
 
                 <Polygon
-                    edited={ !canClose }
+                    opened
                     highlighted={ canClose }
                     points={ [...points, position] } />
 
                 { position && <Point position={ position } /> }
 
                 { flatMap( polygons, ( polygon, polygonIndex ) => polygon.map( ( point, pointIndex ) => (
-                    <Point
+                    <HoverPoint
                         key={ polygonIndex + '_' + pointIndex }
+                        color="red"
                         position={ point }
-                        fill="red"
                         onContextMenu={ this.handlePointRightClick( polygonIndex, pointIndex ) } />
                 ) ) ) }
 

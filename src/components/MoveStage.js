@@ -31,7 +31,7 @@ class MoveStage extends React.Component
 
         return (
             <Stage
-                highlighted={ editedPolygon }
+                edited={ editedPolygon }
                 polygons={ polygons }
                 onSelect={ this.selectPolygon }>
 

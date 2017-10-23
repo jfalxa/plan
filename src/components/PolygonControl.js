@@ -1,15 +1,15 @@
 import React from 'react'
 
 import Polygon from './Polygon'
-import Point from './Point'
+import HoverPoint from './HoverPoint'
 import withMovement from './withMovement'
 import { move } from '../utils/geometry'
 import { snapToGrid } from '../utils/grid'
 
 
 const PointControl = withMovement( ( { position, movement, onMove, onMoveEnd } ) => (
-    <Point
-        fill="green"
+    <HoverPoint
+        color="green"
         position={ position }
         onMouseDown={ movement( onMove, onMoveEnd ) } />
 ) )

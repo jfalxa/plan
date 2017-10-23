@@ -28,7 +28,7 @@ class Stage extends React.Component
 
     render()
     {
-        const { polygons, highlighted, children, onSelect, ...stageProps } = this.props;
+        const { polygons, edited, children, onSelect, ...stageProps } = this.props;
 
         return (
             <StageContainer { ...stageProps }>
@@ -36,7 +36,7 @@ class Stage extends React.Component
                     <Polygon
                         key={ i }
                         index={ i }
-                        highlighted={ i === highlighted }
+                        edited={ i === edited }
                         points={ polygon }
                         onMouseDown={ this.handleSelectPolygon( i ) } />
                 ) ) }
