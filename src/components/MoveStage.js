@@ -11,9 +11,16 @@ class MoveStage extends React.Component
         editedPolygon: null
     }
 
-    selectPolygon( index )
-    {
+    resetStage = ( e ) => {
+        this.setState( { editedPolygon: null } )
+    }
+
+    selectPolygon = ( index ) => {
         this.setState( { editedPolygon: index } )
+    }
+
+    updatePolygon = ( polygon ) => {
+        this.props.replacePolygon( this.state.editedPolygon, polygon )
     }
 
     render()
@@ -24,11 +31,15 @@ class MoveStage extends React.Component
         return (
             <Stage
                 highlighted={ editedPolygon }
-                polygons={ polygons }>
+                polygons={ polygons }
+                onClick={ this.resetStage }
+                onSelect={ this.selectPolygon }>
 
-                <PolygonControl
-                    points={ polygon }
-                    onChange={ () => {}  } />
+                { editedPolygon && (
+                    <PolygonControl
+                        points={ polygons[editedPolygon] }
+                        onChange={ this.updatePolygon } />
+                ) }
 
             </Stage>
         )

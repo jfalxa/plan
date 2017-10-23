@@ -10,15 +10,20 @@ const StageContainer = styled( 'svg' )`
     left: 0;
     width: 100%;
     height: 100%;
-    cursor: crosshair;
+    cursor: ${ p => p.edited ? 'crosshair' : 'pointer' };
 `
 
 
 class Stage extends React.Component
 {
+    handleSelectPolygon = ( index ) => ( e ) => {
+        e.stopPropagation()
+        this.props.onSelect( index )
+    }
+
     render()
     {
-        const { polygons, highlighted, children, ...stageProps } = this.props;
+        const { polygons, highlighted, children, onSelect, ...stageProps } = this.props;
 
         return (
             <StageContainer { ...stageProps }>
@@ -27,7 +32,8 @@ class Stage extends React.Component
                         key={ i }
                         index={ i }
                         highlighted={ i === highlighted }
-                        points={ polygon } />
+                        points={ polygon }
+                        onClick={ this.handleSelectPolygon( i ) } />
                 ) ) }
                 { children }
             </StageContainer>

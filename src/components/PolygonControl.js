@@ -15,7 +15,7 @@ class PolygonControl extends React.Component
 
         return (
             <g>
-                <Polygon points={ points } />
+                <Polygon edited points={ points } />
             </g>
         )
     }

@@ -119,6 +119,7 @@ class EditStage extends React.Component
 
         return (
             <Stage
+                edited
                 highlighted={ editedPolygon }
                 polygons={ polygons }
                 onClick={ this.handleClick }
