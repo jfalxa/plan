@@ -31,7 +31,7 @@ class EditStage extends React.Component
     {
         const { points } = this.state
 
-        if ( points.length === 1 )
+        if ( points.length <= 1 )
         {
             this.resetStage()
         }
@@ -89,8 +89,8 @@ class EditStage extends React.Component
     }
 
     handleClick = ( e ) => {
-        const { editedPolygon, editPolygon } = this.props
         const { position, points } = this.state
+        const { editedPolygon, polygons, editPolygon } = this.props
 
         // ignore clicking many times in a row at the same position
         if ( !position || ( points.length > 0 && isEqual( position, points[points.length-1] ) ) )
@@ -98,7 +98,7 @@ class EditStage extends React.Component
             return
         }
         // if a polygon is being edited and the click is made again on the polygon edge
-        else if ( !isNull( editedPolygon ) && isOnPolygon( position, this.props.polygons[editedPolygon] ) )
+        else if ( !isNull( editedPolygon ) && isOnPolygon( position, polygons[editedPolygon] ) && points.length > 0 )
         {
             return this.extendPolygon( editedPolygon, [...points, position] )
         }
