@@ -20,6 +20,7 @@ const openedClass = css`
 
 const highlightedClass = css`
     stroke: green;
+    fill: rgba(0, 255, 0, 0.3);
 `
 
 
