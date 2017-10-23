@@ -65,10 +65,12 @@ class PolygonControl extends React.Component
 
     render()
     {
+        const { points } = this.state
+
         return (
             <g>
                 <PositionControl
-                    points={ this.state.points }
+                    points={ points }
                     onMove={ this.handleMove }
                     onMoveEnd={ this.handleMoveEnd } />
 
