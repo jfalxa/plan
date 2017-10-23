@@ -1,4 +1,5 @@
 import React from 'react'
+import noop from 'lodash/noop'
 import styled from 'react-emotion'
 
 import Polygon from './Polygon'
@@ -16,6 +17,10 @@ const StageContainer = styled( 'svg' )`
 
 class Stage extends React.Component
 {
+    static defaultProps = {
+        onSelect: noop
+    }
+
     handleSelectPolygon = ( index ) => ( e ) => {
         e.stopPropagation()
         this.props.onSelect( index )

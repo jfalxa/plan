@@ -43,24 +43,19 @@ class Navigation extends React.Component
 
     toggleRoute = ( e ) => {
         // ignore all keys but the spacebar
-        if ( e.keyCode !== 32 )
+        if ( e.keyCode === 32 )
         {
-            return
+            const route = ( this.props.location.pathname === '/' ) ? '/move' : '/'
+            this.props.history.push( route )
         }
-
-        const route = ( this.props.location.pathname === '/' )
-            ? '/edit'
-            : '/'
-
-        this.props.history.push( route )
     }
 
     render()
     {
         return (
             <NavContainer>
-                <ToggleLink to="/" active={ this.isActive( '/' ) }>MOVE</ToggleLink>
-                <ToggleLink to="/edit" active={ this.isActive( '/edit' ) }>EDIT</ToggleLink>
+                <ToggleLink to="/" active={ this.isActive( '/' ) }>EDIT</ToggleLink>
+                <ToggleLink to="/move" active={ this.isActive( '/move' ) }>MOVE</ToggleLink>
             </NavContainer>
         );
     }

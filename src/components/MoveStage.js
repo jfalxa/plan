@@ -1,4 +1,5 @@
 import React from 'react'
+import isNull from 'lodash/isNull'
 
 import Stage from './Stage'
 import PolygonControl from './PolygonControl'
@@ -25,17 +26,16 @@ class MoveStage extends React.Component
 
     render()
     {
-        const { polygon, editedPolygon } = this.state
+        const { editedPolygon } = this.state
         const { polygons } = this.props
 
         return (
             <Stage
                 highlighted={ editedPolygon }
                 polygons={ polygons }
-                onClick={ this.resetStage }
                 onSelect={ this.selectPolygon }>
 
-                { editedPolygon && (
+                { !isNull( editedPolygon ) && (
                     <PolygonControl
                         points={ polygons[editedPolygon] }
                         onChange={ this.updatePolygon } />
@@ -45,7 +45,6 @@ class MoveStage extends React.Component
         )
     }
 }
-
 
 
 export default withMoveStage( MoveStage )

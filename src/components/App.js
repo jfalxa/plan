@@ -10,8 +10,8 @@ function App()
     return (
 
         <div>
-            <Route path="/" component={ MoveStage } />
-            <Route path="/edit" component={ EditStage } />
+            <Route exact path="/" component={ EditStage } />
+            <Route path="/move" component={ MoveStage } />
 
             <Navigation />
         </div>
