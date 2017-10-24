@@ -34,6 +34,7 @@ class EditStage extends React.Component
         if ( points.length <= 1 )
         {
             this.resetStage()
+            this.props.editPolygon( null )
         }
         else
         {
@@ -86,7 +87,7 @@ class EditStage extends React.Component
     handlePointRightClick = ( polygonIndex, pointIndex ) => ( e ) => {
         e.preventDefault()
 
-        if ( isNull( this.props.editedPolygon ) )
+        if ( isNull( this.props.editedPolygon ) || this.state.points.length === 0 )
         {
             this.removePolygonPoint( polygonIndex, pointIndex )
         }
