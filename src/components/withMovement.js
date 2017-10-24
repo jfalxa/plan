@@ -26,6 +26,11 @@ function withMovement( Component )
         }
 
         handleMoveStart = ( onMove, onMoveEnd ) => ( e ) => {
+            if ( e.button !== 0 )
+            {
+                return
+            }
+
             e.stopPropagation()
             this.startListening( onMove, onMoveEnd )
             this.position = [e.clientX, e.clientY]
