@@ -6,21 +6,37 @@ export function isEqual( a, b )
     return ( a[0] === b[0] ) && ( a[1] === b[1] )
 }
 
+
 export function move( a, b )
 {
     return [a[0] + b[0], a[1] + b[1]]
 }
+
 
 export function subtract( origin, destination )
 {
     return [destination[0] - origin[0], destination[1] - origin[1]]
 }
 
+
 export function distance( origin, destination )
 {
     const delta = subtract( origin, destination )
 
     return Math.sqrt( delta[0]*delta[0] + delta[1]*delta[1] )
+}
+
+
+export function alignPoints( a, b )
+{
+    const delta = subtract( a, b )
+
+    // if the distance if bigger on the horizontal axis
+    return ( Math.abs( delta[0] ) > Math.abs( delta[1] ) )
+        // align horizontally
+        ? [b[0], a[1]]
+        // align vertically
+        : [a[0], b[1]]
 }
 
 
@@ -103,12 +119,10 @@ export function combinePolygons( a, b )
     const reverseA = [...a].reverse()
     const reverseB = [...b].reverse()
 
-    const firstEdge = findEdge( first, a )
-    const lastEdge = findEdge( last, a )
-
     // find the two paths that connect first to last on a
     const path = findPath( first, last, a )
     const reversePath = findPath( first, last, reverseA )
+
 
     const pathArea = Math.abs( polygonArea( [...path, ...reverseB] ) )
     const reversePathArea = Math.abs( polygonArea( [...reversePath, ...reverseB] ) )
@@ -116,8 +130,11 @@ export function combinePolygons( a, b )
     // only keep the one that generates the bigger polygon
     const longerPath = ( pathArea > reversePathArea ) ? path : reversePath
 
+    const onSameEdge = ( path.length === a.length )
+    const isFirstFirst = distance( first, longerPath[0] ) < distance( last, longerPath[0] )
+
     // when both points are on the same edge, check which one is closer to the first point
-    return ( firstEdge === lastEdge ) && ( distance( first, longerPath[0] ) > distance( last, longerPath[0] ) )
+    return onSameEdge && !isFirstFirst
         ? [...longerPath, ...b]
         : [...longerPath, ...reverseB]
 }

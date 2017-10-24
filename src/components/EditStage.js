@@ -1,14 +1,14 @@
 import React from 'react'
 import isNull from 'lodash/isNull'
 import flatMap from 'lodash/flatMap';
+import last from 'lodash/last';
 
 import withEditStage from './withEditStage'
 import Stage from './Stage'
 import Polygon from './Polygon'
 import HoverPoint, { Point } from './HoverPoint'
 import { snapToGrid } from '../utils/grid'
-import { isFirstPoint, isOnPolygon, isEqual } from '../utils/geometry'
-
+import { alignPoints, isFirstPoint, isOnPolygon, isEqual } from '../utils/geometry'
 
 class EditStage extends React.Component
 {
@@ -76,7 +76,15 @@ class EditStage extends React.Component
     }
 
     handleMove = ( e ) => {
-        this.setState( { position: snapToGrid( [e.clientX, e.clientY] ) } )
+        const lastPoint = last( this.state.points )
+        const gridPosition = snapToGrid( [e.clientX, e.clientY] )
+
+        // only move vertically or horizontally while holding the shift key
+        const position = ( e.shiftKey && lastPoint )
+            ? alignPoints( lastPoint, gridPosition )
+            : gridPosition
+
+        this.setState( { position } )
     }
 
     handleRightClick = ( e ) => {
@@ -98,7 +106,7 @@ class EditStage extends React.Component
         const { editedPolygon, polygons, editPolygon } = this.props
 
         // ignore clicking many times in a row at the same position
-        if ( !position || ( points.length > 0 && isEqual( position, points[points.length-1] ) ) )
+        if ( !position || ( points.length > 0 && isEqual( position, last( points ) ) ) )
         {
             return
         }
