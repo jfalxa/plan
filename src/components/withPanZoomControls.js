@@ -2,7 +2,7 @@ import React from 'react'
 import compose from 'lodash/flowRight'
 
 import withMovement from './withMovement'
-import { move, project, subtract, scale } from '../utils/geometry'
+import { move, subtract, scale } from '../utils/geometry'
 
 function computeZoom( zoom, modifier )
 {

@@ -31,6 +31,19 @@ class Stage extends React.Component
                 onWheel={ panZoom( onPanZoom ) }
                 onMouseDown={ startPanZoom( onPanZoom ) }>
 
+                <line
+                    x1="-10000" y1="0"
+                    x2="10000" y2="0"
+                    stroke="#ccc"
+                    strokeWidth="1" />
+
+                <line
+                    x1="0" y1="-10000"
+                    x2="0" y2="10000"
+                    stroke="#ccc"
+                    strokeWidth="1" />
+
+
                 { children }
 
             </svg>

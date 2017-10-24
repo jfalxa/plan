@@ -42,10 +42,8 @@ class PolygonControl extends React.Component
     }
 
     handleMove = ( e, delta ) => {
-        const { pan, zoom } = this.props
-
         const points = this.props.points.map(
-            point => move( point, snapToGrid( scale( delta, 1/zoom ) ) )
+            point => move( point, snapToGrid( scale( delta, 1/this.props.zoom ) ) )
         )
 
         this.setState( { points } )
