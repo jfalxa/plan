@@ -58,48 +58,68 @@ function edge( index, polygon )
 }
 
 
-function findPath( point, polygon )
+function findPath( first, last, polygon )
 {
-    const index = findEdge( point, polygon )
-    return polygon.slice( 0, index + 1 )
+    const path = []
+
+    let i = 0
+    let isFirstFound = false
+    let isLastFound = false
+
+    while( !isLastFound )
+    {
+        const currentEdge = edge( i, polygon )
+        const isFirstInEdge = isInSegment( first, currentEdge )
+        const isLastInEdge = isInSegment( last, currentEdge )
+
+        i = ( i + 1 ) % polygon.length
+
+        if ( isFirstFound && !isLastInEdge )
+        {
+            path.push( polygon[i] )
+        }
+
+        if ( isFirstFound && isLastInEdge )
+        {
+            isLastFound = true
+        }
+
+        if ( !isFirstFound && isFirstInEdge )
+        {
+            isFirstFound = true
+            path.push( polygon[i] )
+        }
+    }
+
+    return path
 }
 
 
-// meeeeeh this algorithm is still missing something
-// BUG: when drawing a triangle starting from the first polygon point to the second
 export function combinePolygons( a, b )
 {
     const first = b[0]
     const last = b[b.length-1]
 
+    const reverseA = [...a].reverse()
+    const reverseB = [...b].reverse()
+
     const firstEdge = findEdge( first, a )
     const lastEdge = findEdge( last, a )
 
     const hasSameEdge = ( firstEdge === lastEdge )
-    const isFirstFirst = isEqual( first, a[0] )
-    const isLastSecond = isEqual( last, a[1] )
-
-    // reorganize a's points so they begin with the point closer to first
-    const points = !( isFirstFirst && isLastSecond )
-        ? [...a.slice( firstEdge + 1 ), ...a.slice( 0, firstEdge + 1 )]
-        : [...a.reverse()]
 
     // find the two paths that connect first to last on a
-    const path = findPath( last, points )
-    const reversePath = !hasSameEdge
-        ? findPath( last, points.reverse() )
-        : []
+    const path = findPath( first, last, a )
+    const reversePath = findPath( first, last, reverseA )
 
-    const pathArea = polygonArea( [...path, ...b.reverse()] )
-    const reversePathArea = polygonArea( [...reversePath, ...b.reverse()] )
+    const pathArea = Math.abs( polygonArea( [...path, ...reverseB] ) )
+    const reversePathArea = Math.abs( polygonArea( [...reversePath, ...reverseB] ) )
 
     // only keep the one that generates the bigger polygon
-    const longerPath = Math.abs( pathArea ) > Math.abs( reversePathArea )
-        ? path
-        : reversePath
+    const longerPath = ( pathArea > reversePathArea ) ? path : reversePath
 
     // when both points are on the same edge, check which one is closer to the first point
-    return ( hasSameEdge && ( longerPath.length === 0 || distance( first, longerPath[0] ) > distance( last, longerPath[0] ) ) )
+    return hasSameEdge && ( distance( first, longerPath[0] ) > distance( last, longerPath[0] ) )
         ? [...longerPath, ...b]
         : [...longerPath, ...b.reverse()]
 }
