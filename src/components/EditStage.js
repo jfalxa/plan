@@ -64,11 +64,7 @@ class EditStage extends React.Component
     removePolygonPoint( polygonIndex, pointIndex )
     {
         const polygon = this.props.polygons[polygonIndex]
-        const modifiedPolygon =
-        [
-            ...polygon.slice( 0, pointIndex ),
-            ...polygon.slice( pointIndex + 1 )
-        ]
+        const modifiedPolygon = [...polygon.slice( 0, pointIndex ), ...polygon.slice( pointIndex + 1 )]
 
         this.props.replacePolygon( polygonIndex, modifiedPolygon )
     }
@@ -97,8 +93,10 @@ class EditStage extends React.Component
 
     handlePointRightClick = ( polygonIndex, pointIndex ) => ( e ) => {
         e.preventDefault()
+        e.stopPropagation()
 
-        if ( isNull( this.props.editedPolygon ) || this.state.points.length === 0 )
+        // only remove polygon points when something is not being edited
+        if ( this.state.points.length === 0 )
         {
             this.removePolygonPoint( polygonIndex, pointIndex )
         }

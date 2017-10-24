@@ -39,13 +39,23 @@ function handleReplacePolygon( state, action )
 {
     const [index, polygon] = action.payload
 
-    // if there is no replacement polygon or if it's (almost) empty, remove it
-    const spliceArgs = ( !polygon || polygon.length <= 1 )
+    // if there is no replacement polygon or if it's (almost) empty
+    const isEmpty = ( !polygon || polygon.length <=1 )
+
+    // remove it from the list
+    // otherwise add the new one
+    const spliceArgs = isEmpty
         ? [index, 1]
         : [index, 1, polygon]
 
+    // if the polygon is empty and it was the edited one, reset selection
+    const editedPolygon = ( isEmpty && state.editedPolygon === index )
+        ? null
+        : state.editedPolygon
+
     return update( state, {
-        polygons: { $splice: [spliceArgs] }
+        polygons: { $splice: [spliceArgs] },
+        editedPolygon: { $set: editedPolygon }
     } )
 }
 

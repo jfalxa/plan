@@ -10,7 +10,7 @@ function DistancePolygon( { points } )
     return (
         <g>
             { points.map( (_, i) => edge( i, points ) ).map( ( segment, i ) => (
-                <g>
+                <g key={ i }>
                     <path
                         id={ i }
                         d={ toPath( edge( i, points ), true ) } />
