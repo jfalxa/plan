@@ -22,3 +22,4 @@ Draw polygons to quickly make plans.
 - drag a selected polygon to move it on the stage
 - drag a selected polygon while holding CTRL to create a copy
 - drag a selected polygon's point to change its position
+- press DEL while a polygon is selected to remove it
