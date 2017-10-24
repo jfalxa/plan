@@ -16,6 +16,11 @@ class MoveStage extends React.Component
             : replacePolygon( editedPolygon, polygon )
     }
 
+    handleRightClick = ( e ) => {
+        e.preventDefault()
+        this.props.editPolygon( null )
+    }
+
     render()
     {
         const { polygons, editedPolygon, editPolygon } = this.props
@@ -24,7 +29,8 @@ class MoveStage extends React.Component
             <Stage
                 edited={ editedPolygon }
                 polygons={ polygons }
-                onSelect={ editPolygon }>
+                onSelect={ editPolygon }
+                onContextMenu={ this.handleRightClick }>
 
                 { !isNull( editedPolygon ) && (
                     <PolygonControl
