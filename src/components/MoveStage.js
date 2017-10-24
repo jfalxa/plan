@@ -8,12 +8,29 @@ import withMoveStage from './withMoveStage'
 
 class MoveStage extends React.Component
 {
+    componentDidMount()
+    {
+        document.addEventListener( 'keypress', this.removePolygon )
+    }
+
+    componentWillUnmount()
+    {
+        document.removeEventListener( 'keypress', this.removePolygon )
+    }
+
     updatePolygon = ( polygon, create ) => {
         const { editedPolygon, addPolygon, replacePolygon } = this.props
 
         return create
             ? addPolygon( polygon )
             : replacePolygon( editedPolygon, polygon )
+    }
+
+    removePolygon = ( e ) => {
+        if ( e.key === 'Delete' )
+        {
+            this.props.replacePolygon( this.props.editedPolygon, null )
+        }
     }
 
     handleRightClick = ( e ) => {
