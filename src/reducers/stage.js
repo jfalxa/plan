@@ -4,11 +4,19 @@ import { createAction, handleActions } from 'redux-actions'
 import { clockwise, combinePolygons } from '../utils/geometry'
 
 
+export const initPolygons = createAction( 'INIT_POLYGONS' )
 export const editPolygon = createAction( 'EDIT_POLYGON' )
 export const addPolygon = createAction( 'ADD_POLYGON' )
 export const extendPolygon = createAction( 'EXTEND_POLYGON', ( index, points ) => [index, points] )
 export const replacePolygon = createAction( 'REPLACE_POLYGON', ( index, polygon ) => [index, polygon] )
 
+
+function handleInitPolygons( state, action )
+{
+    return update( state, {
+        polygons: { $set: action.payload }
+    } )
+}
 
 function handleEditPolygon( state, action )
 {
@@ -68,6 +76,7 @@ const initialState =
 
 const reducerMap =
 {
+    [initPolygons]: handleInitPolygons,
     [editPolygon]: handleEditPolygon,
     [addPolygon]: handleAddPolygon,
     [extendPolygon]: handleExtendPolygon,

@@ -65,7 +65,7 @@ class Navigation extends React.Component
         if ( e.key === ' ' )
         {
             const route = ( this.props.location.pathname === '/' ) ? '/move' : '/'
-            this.props.history.push( route )
+            this.props.history.replace( route )
         }
     }
 

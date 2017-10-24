@@ -1,9 +1,11 @@
 import React from 'react'
 import styled from 'react-emotion'
 import { Route } from 'react-router-dom'
+
 import Navigation from './Navigation'
 import EditStage from './EditStage'
 import MoveStage from './MoveStage'
+import withURLState from './withURLState';
 
 
 const AppContainer = styled( 'div' )`
@@ -26,4 +28,4 @@ function App()
 }
 
 
-export default App
+export default withURLState( App )
