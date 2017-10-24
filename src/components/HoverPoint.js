@@ -2,12 +2,12 @@ import React from 'react';
 import styled from 'react-emotion'
 
 
-export function Point( { position, color, ...circleProps } )
+export function Point( { position, r=4, color='black', ...circleProps } )
 {
     return (
         <circle
             { ...circleProps }
-            r="4"
+            r={ r }
             fill={ color }
             cx={ position[0] }
             cy={ position[1] } />
@@ -16,7 +16,6 @@ export function Point( { position, color, ...circleProps } )
 
 
 export const InvisiblePoint = styled( Point )`
-    r: 15;
     fill: transparent;
 
     &:hover
@@ -31,11 +30,13 @@ function HoverPoint( { position, color, ...pointProps } )
     return (
         <g>
             <Point
+                r="4"
                 color={ color }
                 position={ position } />
 
             <InvisiblePoint
                 { ...pointProps }
+                r="15"
                 color={ color }
                 position={ position } />
         </g>
