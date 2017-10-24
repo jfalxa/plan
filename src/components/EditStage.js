@@ -85,7 +85,11 @@ class EditStage extends React.Component
 
     handlePointRightClick = ( polygonIndex, pointIndex ) => ( e ) => {
         e.preventDefault()
-        this.removePolygonPoint( polygonIndex, pointIndex )
+
+        if ( isNull( this.props.editedPolygon ) )
+        {
+            this.removePolygonPoint( polygonIndex, pointIndex )
+        }
     }
 
     handleClick = ( e ) => {

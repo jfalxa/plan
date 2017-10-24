@@ -106,8 +106,6 @@ export function combinePolygons( a, b )
     const firstEdge = findEdge( first, a )
     const lastEdge = findEdge( last, a )
 
-    const hasSameEdge = ( firstEdge === lastEdge )
-
     // find the two paths that connect first to last on a
     const path = findPath( first, last, a )
     const reversePath = findPath( first, last, reverseA )
@@ -119,8 +117,8 @@ export function combinePolygons( a, b )
     const longerPath = ( pathArea > reversePathArea ) ? path : reversePath
 
     // when both points are on the same edge, check which one is closer to the first point
-    return hasSameEdge && ( distance( first, longerPath[0] ) > distance( last, longerPath[0] ) )
+    return ( firstEdge === lastEdge ) && ( distance( first, longerPath[0] ) > distance( last, longerPath[0] ) )
         ? [...longerPath, ...b]
-        : [...longerPath, ...b.reverse()]
+        : [...longerPath, ...reverseB]
 }
 
