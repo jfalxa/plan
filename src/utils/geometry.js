@@ -68,7 +68,7 @@ export function isOnPolygon( point, polygon )
 }
 
 
-function edge( index, polygon )
+export function edge( index, polygon )
 {
     return [polygon[index], polygon[(index+1) % polygon.length]]
 }

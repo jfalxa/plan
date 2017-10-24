@@ -7,6 +7,7 @@ import withEditStage from './withEditStage'
 import Stage from './Stage'
 import Polygon from './Polygon'
 import DistanceDot from './DistanceDot'
+import DistancePolygon from './DistancePolygon'
 import HoverPoint from './HoverPoint'
 import { snapToGrid } from '../utils/grid'
 import { alignPoints, isFirstPoint, isOnPolygon, isEqual } from '../utils/geometry'
@@ -151,6 +152,8 @@ class EditStage extends React.Component
                 onClick={ this.handleClick }
                 onMouseMove={ this.handleMove }
                 onContextMenu={ this.handleRightClick }>
+
+                { !isNull( editedPolygon ) && <DistancePolygon points={ polygons[editedPolygon] } /> }
 
                 <Polygon
                     opened

@@ -2,6 +2,7 @@ import React from 'react'
 
 import Polygon from './Polygon'
 import HoverPoint from './HoverPoint'
+import DistancePolygon from './DistancePolygon'
 import withMovement from './withMovement'
 import { move } from '../utils/geometry'
 import { snapToGrid } from '../utils/grid'
@@ -69,6 +70,8 @@ class PolygonControl extends React.Component
 
         return (
             <g>
+                <DistancePolygon points={ points } />
+
                 <PositionControl
                     points={ points }
                     onMove={ this.handleMove }
