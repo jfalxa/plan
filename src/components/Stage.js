@@ -1,51 +1,43 @@
 import React from 'react'
-import noop from 'lodash/noop'
-import styled from 'react-emotion'
+import { css } from 'react-emotion'
 
 import Polygon from './Polygon'
+import withPanZoomControls from './withPanZoomControls'
+import { toViewBox } from '../utils/svg'
 
 
-const StageContainer = styled( 'svg' )`
+const stageContainer = css`
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    cursor: ${ p => p.edited ? 'crosshair' : 'pointer' };
 `
-
 
 class Stage extends React.Component
 {
     static defaultProps = {
-        onSelect: noop
-    }
-
-    handleSelectPolygon = ( index ) => ( e ) => {
-        e.stopPropagation()
-        this.props.onSelect( index )
+        onPanZoom: () => {}
     }
 
     render()
     {
-        const { polygons, edited, children, onSelect, ...stageProps } = this.props;
+        const { pan, zoom, panZoom, startPanZoom, resetPanZoom, onPanZoom, children, ...stageProps } = this.props;
 
         return (
-            <StageContainer { ...stageProps }>
-                { polygons.map( ( polygon, i ) => (
-                    <Polygon
-                        key={ i }
-                        index={ i }
-                        edited={ i === edited }
-                        points={ polygon }
-                        onMouseDown={ this.handleSelectPolygon( i ) } />
-                ) ) }
+            <svg
+                { ...stageProps }
+                className={ stageContainer }
+                viewBox={ toViewBox( pan, zoom ) }
+                onWheel={ panZoom( onPanZoom ) }
+                onMouseDown={ startPanZoom }>
+
                 { children }
-            </StageContainer>
+
+            </svg>
         );
     }
 }
 
 
-export default Stage
-
+export default withPanZoomControls( Stage )

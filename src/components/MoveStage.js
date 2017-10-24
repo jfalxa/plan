@@ -2,6 +2,7 @@ import React from 'react'
 import isNull from 'lodash/isNull'
 
 import Stage from './Stage'
+import Polygon from './Polygon'
 import PolygonControl from './PolygonControl'
 import withMoveStage from './withMoveStage'
 
@@ -38,16 +39,30 @@ class MoveStage extends React.Component
         this.props.editPolygon( null )
     }
 
+    handleSelectPolygon = ( i ) => ( e ) => {
+        e.stopPropagation()
+        this.props.editPolygon( i )
+    }
+
     render()
     {
-        const { polygons, editedPolygon, editPolygon } = this.props
+        const { pan, zoom, polygons, editedPolygon, panZoom } = this.props
 
         return (
             <Stage
-                edited={ editedPolygon }
-                polygons={ polygons }
-                onSelect={ editPolygon }
+                pan={ pan }
+                zoom={ zoom }
+                onPanZoom={ panZoom }
                 onContextMenu={ this.handleRightClick }>
+
+                { polygons.map( ( polygon, i ) => (
+                    <Polygon
+                        key={ i }
+                        index={ i }
+                        edited={ i === editedPolygon }
+                        points={ polygon }
+                        onMouseDown={ this.handleSelectPolygon( i ) } />
+                ) ) }
 
                 { !isNull( editedPolygon ) && (
                     <PolygonControl

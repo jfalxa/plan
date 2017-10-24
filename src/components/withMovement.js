@@ -1,4 +1,5 @@
 import React from 'react'
+import noop from 'lodash/noop'
 
 import { subtract } from '../utils/geometry'
 
@@ -11,8 +12,8 @@ function withMovement( Component )
 
         startListening( onMove, onMoveEnd )
         {
-            this._onMove = onMove
-            this._onMoveEnd = onMoveEnd
+            this._onMove = onMove || noop
+            this._onMoveEnd = onMoveEnd || noop
 
             document.addEventListener( 'mousemove', this.handleMove )
             document.addEventListener( 'mouseup', this.handleMoveEnd )
@@ -25,6 +26,7 @@ function withMovement( Component )
         }
 
         handleMoveStart = ( onMove, onMoveEnd ) => ( e ) => {
+            e.stopPropagation()
             this.startListening( onMove, onMoveEnd )
             this.position = [e.clientX, e.clientY]
         }

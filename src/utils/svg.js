@@ -11,3 +11,9 @@ export function toPath( [first, ...rest], opened )
     return `${ firstCommand } ${ restCommands.join( ' ' ) } ${ opened ? '' : 'Z' }`
 }
 
+
+export function toViewBox( pan, zoom )
+{
+    return `${ pan[0] } ${ pan[1] } ${ document.body.offsetWidth / zoom } ${ document.body.offsetHeight / zoom }`
+}
+

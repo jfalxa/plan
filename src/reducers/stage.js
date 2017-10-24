@@ -9,6 +9,7 @@ export const editPolygon = createAction( 'EDIT_POLYGON' )
 export const addPolygon = createAction( 'ADD_POLYGON' )
 export const extendPolygon = createAction( 'EXTEND_POLYGON', ( index, points ) => [index, points] )
 export const replacePolygon = createAction( 'REPLACE_POLYGON', ( index, polygon ) => [index, polygon] )
+export const panZoom = createAction( 'PAN_ZOOM', ( pan, zoom ) => [pan, zoom] )
 
 
 function handleInitPolygons( state, action )
@@ -68,11 +69,23 @@ function handleReplacePolygon( state, action )
     } )
 }
 
+function handlePanZoom( state, action )
+{
+    const [pan, zoom] = action.payload
+
+    return update( state, {
+        pan: { $set: pan },
+        zoom: { $set: zoom }
+    } )
+}
+
 
 const initialState =
 {
     editedPolygon: null,
-    polygons: []
+    polygons: [],
+    pan: [0, 0],
+    zoom: 1
 }
 
 const reducerMap =
@@ -81,7 +94,8 @@ const reducerMap =
     [editPolygon]: handleEditPolygon,
     [addPolygon]: handleAddPolygon,
     [extendPolygon]: handleExtendPolygon,
-    [replacePolygon]: handleReplacePolygon
+    [replacePolygon]: handleReplacePolygon,
+    [panZoom]: handlePanZoom
 }
 
 export default handleActions( reducerMap, initialState )

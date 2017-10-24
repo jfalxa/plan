@@ -140,16 +140,26 @@ class EditStage extends React.Component
     render()
     {
         const { points, position } = this.state
-        const { editedPolygon, polygons } = this.props
+        const { editedPolygon, polygons, pan, zoom, panZoom } = this.props
+
         const canClose = isFirstPoint( position, points )
 
         return (
             <Stage
-                edited={ editedPolygon }
-                polygons={ polygons }
+                pan={ pan }
+                zoom={ zoom }
+                onPanZoom={ panZoom }
                 onClick={ this.handleClick }
-                onMouseMove={ this.handleMove }
-                onContextMenu={ this.handleRightClick }>
+                onContextMenu={ this.handleRightClick }
+                onMouseMove={ this.handleMove }>
+
+                { polygons.map( ( polygon, i ) => (
+                    <Polygon
+                        key={ i }
+                        index={ i }
+                        edited={ i === editedPolygon }
+                        points={ polygon } />
+                ) ) }
 
                 { !isNull( editedPolygon ) && <DistancePolygon points={ polygons[editedPolygon] } /> }
 
@@ -169,7 +179,6 @@ class EditStage extends React.Component
                         position={ point }
                         onContextMenu={ this.handlePointRightClick( polygonIndex, pointIndex ) } />
                 ) ) ) }
-
 
             </Stage>
         )
