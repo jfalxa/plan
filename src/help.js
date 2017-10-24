@@ -4,6 +4,8 @@ function help()
 # ALL
 - press SPACE to switch between modes
 - press ESC to clear the whole stage
+- use your trackpad or drag your mouse around to move on the stage
+- hold CTRL while scrolling to control zoom
 
 # EDIT
 - click on an empty space to start a new polygon
