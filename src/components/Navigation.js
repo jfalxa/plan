@@ -90,7 +90,7 @@ class Navigation extends React.Component
                     <ToggleLink to="/move" active={ this.isActive( '/move' ) }>MOVE</ToggleLink>
                 </LinkContainer>
                 <RoundButton title="Clear stage" href='#' onClick={ reset }>X</RoundButton>
-                <RoundButton title="Center view" href='#' onClick={ () => panZoom( [0, 0] ) }>C</RoundButton>
+                <RoundButton title="Reset viewport" href='#' onClick={ () => panZoom( [0, 0], 1 ) }>R</RoundButton>
                 <RoundButton title="Show help" href="#" onClick={ help }>?</RoundButton>
             </NavContainer>
         );

@@ -2,11 +2,11 @@ import React from 'react'
 import compose from 'lodash/flowRight'
 
 import withMovement from './withMovement'
-import { move } from '../utils/geometry'
+import { move, project, subtract, scale } from '../utils/geometry'
 
 function computeZoom( zoom, modifier )
 {
-    return Math.max( 0.1, Math.min( zoom + modifier/300, 3 ) )
+    return Math.max( 0.1, Math.min( zoom + modifier/100, 3 ) )
 }
 
 function withPanZoomControls( Component )
@@ -42,18 +42,22 @@ function withPanZoomControls( Component )
             e.preventDefault()
             e.stopPropagation()
 
+            const { pan:prevPan, zoom:prevZoom } = this.state
+
+            const position = [e.clientX, e.clientY]
+
             const deltaX = e.deltaX || this._delta[0] - delta[0] || 0
             const deltaY = e.deltaY || this._delta[1] - delta[1] || 0
 
             this._delta = delta
 
             const zoom = e.ctrlKey
-                ? computeZoom( this.state.zoom, -deltaY )
-                : this.state.zoom
+                ? computeZoom( prevZoom, -deltaY )
+                : prevZoom
 
-            const pan = !e.ctrlKey
-                ? move( this.state.pan, [deltaX, deltaY] )
-                : this.state.pan
+            const pan = e.ctrlKey
+                ? move( prevPan, subtract( scale( position, 1/zoom ), scale( position, 1/prevZoom ) ) )
+                : move( prevPan, [deltaX, deltaY] )
 
             onPanZoom( pan, zoom )
             this.setState( { pan, zoom } )

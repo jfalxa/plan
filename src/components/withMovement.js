@@ -1,7 +1,7 @@
 import React from 'react'
 import noop from 'lodash/noop'
 
-import { subtract } from '../utils/geometry'
+import { alignPoints, subtract } from '../utils/geometry'
 
 
 function withMovement( Component )
@@ -33,7 +33,15 @@ function withMovement( Component )
 
         handleMove = ( e ) => {
             e.stopPropagation()
-            const delta = subtract( this.position, [e.clientX, e.clientY]  )
+
+            const position = [e.clientX, e.clientY]
+
+            const finalPosition = e.shiftKey
+                ? alignPoints( this.position, position )
+                : position
+
+            const delta = subtract( this.position, finalPosition )
+
             this._onMove( e, delta )
         }
 

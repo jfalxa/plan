@@ -36,8 +36,8 @@ export function distance( origin, destination )
 export function project( position, pan, zoom )
 {
     return [
-        ( position[0] + pan[0] * zoom ) / zoom,
-        ( position[1] + pan[1] * zoom ) / zoom
+        position[0] / zoom + pan[0],
+        position[1] / zoom + pan[1]
     ]
 }
 
@@ -54,6 +54,7 @@ export function clockwise( polygon )
 }
 
 
+// returns a vector based on b and aligned with a
 export function alignPoints( a, b )
 {
     const delta = subtract( a, b )
