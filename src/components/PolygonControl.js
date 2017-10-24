@@ -49,11 +49,11 @@ class PolygonControl extends React.Component
         this.setState( { points } )
     }
 
-    handleMovePoint = ( index ) => ( e ) => {
+    handleMovePoint = ( index ) => ( e, delta ) => {
         const points =
         [
             ...this.state.points.slice( 0, index ),
-            snapToGrid( [e.clientX, e.clientY] ),
+            snapToGrid( move( this.props.points[index], delta ) ),
             ...this.state.points.slice( index + 1 )
         ]
 
