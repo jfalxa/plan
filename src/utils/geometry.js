@@ -27,6 +27,18 @@ export function distance( origin, destination )
 }
 
 
+export function edge( index, polygon )
+{
+    return [polygon[index], polygon[(index+1) % polygon.length]]
+}
+
+
+export function clockwise( polygon )
+{
+    return isClockwise( polygon ) ? polygon : [...polygon].reverse()
+}
+
+
 export function alignPoints( a, b )
 {
     const delta = subtract( a, b )
@@ -68,9 +80,14 @@ export function isOnPolygon( point, polygon )
 }
 
 
-export function edge( index, polygon )
+export function isClockwise( polygon )
 {
-    return [polygon[index], polygon[(index+1) % polygon.length]]
+    const sum = polygon.reduce( ( sum, _, i ) => {
+        const [a, b] = edge( i, polygon )
+        return sum + ( b[0] - a[0] ) * ( b[1] + a[1] )
+    }, 0 )
+
+    return sum < 0
 }
 
 

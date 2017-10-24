@@ -1,7 +1,7 @@
 import update from 'immutability-helper'
 import { createAction, handleActions } from 'redux-actions'
 
-import { combinePolygons } from '../utils/geometry'
+import { clockwise, combinePolygons } from '../utils/geometry'
 
 
 export const editPolygon = createAction( 'EDIT_POLYGON' )
@@ -21,7 +21,7 @@ function handleAddPolygon( state, action )
 {
     return update( state, {
         editedPolygon: { $set: state.polygons.length },
-        polygons: { $push: [action.payload] }
+        polygons: { $push: [clockwise( action.payload )] }
     } )
 }
 
@@ -31,7 +31,7 @@ function handleExtendPolygon( state, action )
     const polygon = combinePolygons( state.polygons[index], points )
 
     return update( state, {
-        polygons: { $splice: [[index, 1, polygon]] }
+        polygons: { $splice: [[index, 1, clockwise( polygon )]] }
     } )
 }
 
@@ -46,7 +46,7 @@ function handleReplacePolygon( state, action )
     // otherwise add the new one
     const spliceArgs = isEmpty
         ? [index, 1]
-        : [index, 1, polygon]
+        : [index, 1, clockwise( polygon )]
 
     // if the polygon is empty and it was the edited one, reset selection
     const editedPolygon = ( isEmpty && state.editedPolygon === index )
