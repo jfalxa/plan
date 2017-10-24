@@ -30,7 +30,7 @@ class Stage extends React.Component
                 className={ stageContainer }
                 viewBox={ toViewBox( pan, zoom ) }
                 onWheel={ panZoom( onPanZoom ) }
-                onMouseDown={ startPanZoom }>
+                onMouseDown={ startPanZoom( onPanZoom ) }>
 
                 { children }
 

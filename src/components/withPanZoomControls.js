@@ -38,8 +38,9 @@ function withPanZoomControls( Component )
             this.setState( { pan: [0, 0], zoom: 1 } )
         }
 
-        handlePanZoom = ( onPanZoom ) => ( e, delta={} ) => {
+        handlePanZoom = ( onPanZoom ) => ( e, delta=[] ) => {
             e.preventDefault()
+            e.stopPropagation()
 
             const deltaX = e.deltaX || this._delta[0] - delta[0] || 0
             const deltaY = e.deltaY || this._delta[1] - delta[1] || 0
@@ -73,7 +74,7 @@ function withPanZoomControls( Component )
                     pan={ pan }
                     zoom={ zoom }
                     panZoom={ this.handlePanZoom }
-                    startPanZoom={ movement( this.handlePanZoom, this.handlePanZoomEnd ) }
+                    startPanZoom={ onPanZoom => movement( this.handlePanZoom( onPanZoom ), this.handlePanZoomEnd ) }
                     resetPanZoom={ this.resetPanZoom } />
             )
         }
