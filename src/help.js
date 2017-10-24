@@ -3,6 +3,7 @@ function help()
     alert(`
 # ALL
 - press SPACE to switch between modes
+- press ESC to clear the whole stage
 
 # EDIT
 - click on an empty space to start a new polygon
@@ -16,7 +17,7 @@ function help()
 - click on a polygon to select it
 - right click anywhere to reset selection
 - drag a selected polygon to move it on the stage
-- drag a selected polygon while holding CTRL to create a copy
+- hold CTRL while dragging a polygon to create a copy
 - drag a selected polygon's point to change its position
 - press DEL while a polygon is selected to remove it
     `)
