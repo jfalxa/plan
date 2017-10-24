@@ -1,14 +1,16 @@
 import React from 'react'
 import isNull from 'lodash/isNull'
-import flatMap from 'lodash/flatMap';
-import last from 'lodash/last';
+import flatMap from 'lodash/flatMap'
+import last from 'lodash/last'
 
 import withEditStage from './withEditStage'
 import Stage from './Stage'
 import Polygon from './Polygon'
-import HoverPoint, { Point } from './HoverPoint'
+import DistanceDot from './DistanceDot'
+import HoverPoint from './HoverPoint'
 import { snapToGrid } from '../utils/grid'
 import { alignPoints, isFirstPoint, isOnPolygon, isEqual } from '../utils/geometry'
+
 
 class EditStage extends React.Component
 {
@@ -155,7 +157,9 @@ class EditStage extends React.Component
                     highlighted={ canClose }
                     points={ [...points, position] } />
 
-                { position && <Point position={ position } /> }
+                <DistanceDot
+                    position={ position }
+                    previous={ last( points ) } />
 
                 { flatMap( polygons, ( polygon, polygonIndex ) => polygon.map( ( point, pointIndex ) => (
                     <HoverPoint
