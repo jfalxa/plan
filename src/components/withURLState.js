@@ -33,9 +33,13 @@ function withURLState( Component )
             }
         }
 
+        handleReset = () => {
+            this.props.initPolygons( [] )
+        }
+
         render()
         {
-            return <Component { ...this.props } />
+            return <Component { ...this.props } reset={ this.handleReset } />
         }
     }
 }

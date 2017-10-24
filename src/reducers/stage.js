@@ -14,6 +14,7 @@ export const replacePolygon = createAction( 'REPLACE_POLYGON', ( index, polygon 
 function handleInitPolygons( state, action )
 {
     return update( state, {
+        editedPolygon: { $set: null },
         polygons: { $set: action.payload }
     } )
 }
@@ -62,8 +63,8 @@ function handleReplacePolygon( state, action )
         : state.editedPolygon
 
     return update( state, {
-        polygons: { $splice: [spliceArgs] },
-        editedPolygon: { $set: editedPolygon }
+        editedPolygon: { $set: editedPolygon },
+        polygons: { $splice: [spliceArgs] }
     } )
 }
 

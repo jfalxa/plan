@@ -5,7 +5,6 @@ import { Route } from 'react-router-dom'
 import Navigation from './Navigation'
 import EditStage from './EditStage'
 import MoveStage from './MoveStage'
-import withURLState from './withURLState';
 
 
 const AppContainer = styled( 'div' )`
@@ -28,4 +27,4 @@ function App()
 }
 
 
-export default withURLState( App )
+export default App

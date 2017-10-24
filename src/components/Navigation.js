@@ -1,6 +1,9 @@
 import React from 'react'
 import styled from 'react-emotion'
-import { Link, withRouter } from 'react-router-dom'
+import { Link } from 'react-router-dom'
+
+import withURLState from './withURLState';
+
 
 import help from '../help'
 
@@ -29,7 +32,7 @@ const ToggleLink = styled( Link )`
     text-decoration: none;
 `
 
-const HelpButton = styled( 'a' )`
+const RoundButton = styled( 'a' )`
     display: flex;
     justify-content: center;
     align-items: center;
@@ -47,12 +50,12 @@ class Navigation extends React.Component
 {
     componentDidMount()
     {
-        document.addEventListener( 'keypress', this.toggleRoute )
+        document.addEventListener( 'keydown', this.handleKeyDown )
     }
 
     componentWillUnmount()
     {
-        document.removeEventListener( 'keypress', this.toggleRoute )
+        document.removeEventListener( 'keydown', this.handleKeyDown )
     }
 
     isActive( route )
@@ -60,12 +63,18 @@ class Navigation extends React.Component
         return ( this.props.location.pathname === route )
     }
 
-    toggleRoute = ( e ) => {
-        // ignore all keys but the spacebar
+    handleKeyDown = ( e ) => {
+        // toggle path when SPACE is pressed
         if ( e.key === ' ' )
         {
-            const route = ( this.props.location.pathname === '/' ) ? '/move' : '/'
-            this.props.history.replace( route )
+            const route = this.isActive( '/' ) ? '/move' : '/'
+            this.props.history.push( route )
+        }
+
+        // reset stage after pressing ESC
+        if ( e.key === 'Escape' )
+        {
+            this.props.reset()
         }
     }
 
@@ -77,11 +86,12 @@ class Navigation extends React.Component
                     <ToggleLink to="/" active={ this.isActive( '/' ) }>EDIT</ToggleLink>
                     <ToggleLink to="/move" active={ this.isActive( '/move' ) }>MOVE</ToggleLink>
                 </LinkContainer>
-                <HelpButton href="#" onClick={ help }>?</HelpButton>
+                <RoundButton title="Clear stage" href='#' onClick={ this.props.reset }>X</RoundButton>
+                <RoundButton title="Show help" href="#" onClick={ help }>?</RoundButton>
             </NavContainer>
         );
     }
 }
 
 
-export default withRouter( Navigation )
+export default withURLState( Navigation )
