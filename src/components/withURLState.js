@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { parse } from 'query-string'
 
-import { initPolygons, panZoom } from '../reducers/stage'
+import { initPolygons } from '../reducers/stage'
 
 
 function withURLState( Component )
@@ -47,7 +47,7 @@ function withURLState( Component )
 
 const withStage = connect(
     state => state.stage,
-    { initPolygons, panZoom }
+    { initPolygons }
 )
 
 

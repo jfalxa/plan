@@ -71,12 +71,6 @@ class Navigation extends React.Component
             const route = this.isActive( '/' ) ? '/move' : '/'
             this.props.history.push( route )
         }
-
-        // reset stage after pressing ESC
-        if ( e.key === 'Escape' )
-        {
-            this.props.reset()
-        }
     }
 
     render()
