@@ -13,6 +13,7 @@ function help()
 
 # MOVE
 - click on a polygon to select it
+- right click anywhere to reset selection
 - drag a selected polygon to move it on the stage
 - drag a selected polygon while holding CTRL to create a copy
 - drag a selected polygon's point to change its position
