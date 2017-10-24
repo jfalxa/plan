@@ -62,7 +62,7 @@ class Navigation extends React.Component
 
     toggleRoute = ( e ) => {
         // ignore all keys but the spacebar
-        if ( e.keyCode === 32 )
+        if ( e.key === 32 || e.keyCode === 32 )
         {
             const route = ( this.props.location.pathname === '/' ) ? '/move' : '/'
             this.props.history.push( route )
