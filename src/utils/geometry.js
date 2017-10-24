@@ -60,11 +60,7 @@ function edge( index, polygon )
 
 function findPath( point, polygon )
 {
-    let i = 0
-    let path = []
-
     const index = findEdge( point, polygon )
-
     return polygon.slice( 0, index + 1 )
 }
 
