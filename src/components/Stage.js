@@ -1,7 +1,6 @@
 import React from 'react'
 import { css } from 'react-emotion'
 
-import Polygon from './Polygon'
 import withPanZoomControls from './withPanZoomControls'
 import { toViewBox } from '../utils/svg'
 

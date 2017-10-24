@@ -4,7 +4,7 @@ import Polygon from './Polygon'
 import HoverPoint from './HoverPoint'
 import DistancePolygon from './DistancePolygon'
 import withMovement from './withMovement'
-import { move } from '../utils/geometry'
+import { move, scale } from '../utils/geometry'
 import { snapToGrid } from '../utils/grid'
 
 
@@ -42,18 +42,22 @@ class PolygonControl extends React.Component
     }
 
     handleMove = ( e, delta ) => {
+        const { pan, zoom } = this.props
+
         const points = this.props.points.map(
-            point => move( point, snapToGrid( delta ) )
+            point => move( point, snapToGrid( scale( delta, 1/zoom ) ) )
         )
 
         this.setState( { points } )
     }
 
     handleMovePoint = ( index ) => ( e, delta ) => {
+        const zoomDelta = scale( delta, 1/this.props.zoom )
+
         const points =
         [
             ...this.state.points.slice( 0, index ),
-            snapToGrid( move( this.props.points[index], delta ) ),
+            snapToGrid( move( this.props.points[index], zoomDelta ) ),
             ...this.state.points.slice( index + 1 )
         ]
 

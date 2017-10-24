@@ -66,6 +66,7 @@ class MoveStage extends React.Component
 
                 { !isNull( editedPolygon ) && (
                     <PolygonControl
+                        zoom={ zoom }
                         points={ polygons[editedPolygon] }
                         onChange={ this.updatePolygon } />
                 ) }

@@ -19,11 +19,26 @@ export function subtract( origin, destination )
 }
 
 
+export function scale( vector, factor )
+{
+    return [vector[0] * factor, vector[1] * factor]
+}
+
+
 export function distance( origin, destination )
 {
     const delta = subtract( origin, destination )
 
     return Math.sqrt( delta[0]*delta[0] + delta[1]*delta[1] )
+}
+
+
+export function project( position, pan, zoom )
+{
+    return [
+        ( position[0] + pan[0] * zoom ) / zoom,
+        ( position[1] + pan[1] * zoom ) / zoom
+    ]
 }
 
 

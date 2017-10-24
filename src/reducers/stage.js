@@ -74,8 +74,8 @@ function handlePanZoom( state, action )
     const [pan, zoom] = action.payload
 
     return update( state, {
-        pan: { $set: pan },
-        zoom: { $set: zoom }
+        pan: { $set: pan || state.pan },
+        zoom: { $set: zoom || state.zoom }
     } )
 }
 

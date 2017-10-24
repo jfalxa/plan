@@ -43,6 +43,7 @@ const RoundButton = styled( 'a' )`
     background-color: lightgray;
     color: black;
     font-weight: bold;
+    text-decoration: none;
 `
 
 
@@ -80,13 +81,16 @@ class Navigation extends React.Component
 
     render()
     {
+        const { panZoom, reset } = this.props
+
         return (
             <NavContainer>
                 <LinkContainer>
                     <ToggleLink to="/" active={ this.isActive( '/' ) }>EDIT</ToggleLink>
                     <ToggleLink to="/move" active={ this.isActive( '/move' ) }>MOVE</ToggleLink>
                 </LinkContainer>
-                <RoundButton title="Clear stage" href='#' onClick={ this.props.reset }>X</RoundButton>
+                <RoundButton title="Clear stage" href='#' onClick={ reset }>X</RoundButton>
+                <RoundButton title="Center view" href='#' onClick={ () => panZoom( [0, 0] ) }>C</RoundButton>
                 <RoundButton title="Show help" href="#" onClick={ help }>?</RoundButton>
             </NavContainer>
         );

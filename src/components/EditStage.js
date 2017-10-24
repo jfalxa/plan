@@ -10,7 +10,7 @@ import DistanceDot from './DistanceDot'
 import DistancePolygon from './DistancePolygon'
 import HoverPoint from './HoverPoint'
 import { snapToGrid } from '../utils/grid'
-import { alignPoints, isFirstPoint, isOnPolygon, isEqual } from '../utils/geometry'
+import { project, alignPoints, isFirstPoint, isOnPolygon, isEqual } from '../utils/geometry'
 
 
 class EditStage extends React.Component
@@ -75,8 +75,11 @@ class EditStage extends React.Component
     }
 
     handleMove = ( e ) => {
+        const { pan, zoom } = this.props
+
         const lastPoint = last( this.state.points )
-        const gridPosition = snapToGrid( [e.clientX, e.clientY] )
+        const svgPosition = project( [e.clientX, e.clientY], pan, zoom )
+        const gridPosition = snapToGrid( svgPosition )
 
         // only move vertically or horizontally while holding the shift key
         const position = ( e.shiftKey && lastPoint )

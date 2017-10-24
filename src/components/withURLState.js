@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { parse } from 'query-string'
 
-import { initPolygons } from '../reducers/stage'
+import { initPolygons, panZoom } from '../reducers/stage'
 
 
 function withURLState( Component )
@@ -45,10 +45,10 @@ function withURLState( Component )
 }
 
 
-const withPolygons = connect(
-    state => ( { polygons: state.stage.polygons } ),
-    { initPolygons }
+const withStage = connect(
+    state => state.stage,
+    { initPolygons, panZoom }
 )
 
 
-export default compose( withRouter, withPolygons, withURLState )
+export default compose( withRouter, withStage, withURLState )
