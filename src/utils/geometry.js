@@ -63,13 +63,9 @@ function findPath( point, polygon )
     let i = 0
     let path = []
 
-    while( !isInSegment( point, edge( i, polygon ) ) )
-    {
-        path.push( polygon[i] )
-        i++
-    }
+    const index = findEdge( point, polygon )
 
-    return [...path, polygon[i]]
+    return polygon.slice( 0, index + 1 )
 }
 
 
@@ -84,9 +80,13 @@ export function combinePolygons( a, b )
     const lastEdge = findEdge( last, a )
 
     const hasSameEdge = ( firstEdge === lastEdge )
+    const isFirstFirst = isEqual( first, a[0] )
+    const isLastSecond = isEqual( last, a[1] )
 
     // reorganize a's points so they begin with the point closer to first
-    const points = [...a.slice( firstEdge + 1 ), ...a.slice( 0, firstEdge + 1 )]
+    const points = !( isFirstFirst && isLastSecond )
+        ? [...a.slice( firstEdge + 1 ), ...a.slice( 0, firstEdge + 1 )]
+        : [...a.reverse()]
 
     // find the two paths that connect first to last on a
     const path = findPath( last, points )
