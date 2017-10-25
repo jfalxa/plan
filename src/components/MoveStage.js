@@ -11,12 +11,12 @@ class MoveStage extends React.Component
 {
     componentDidMount()
     {
-        document.addEventListener( 'keypress', this.removePolygon )
+        document.addEventListener( 'keydown', this.removePolygon )
     }
 
     componentWillUnmount()
     {
-        document.removeEventListener( 'keypress', this.removePolygon )
+        document.removeEventListener( 'keydown', this.removePolygon )
     }
 
     updatePolygon = ( polygon, create ) => {
