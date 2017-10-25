@@ -17,8 +17,17 @@ function withURLState( Component )
 
             if ( params.p )
             {
-                this.props.initPolygons( JSON.parse( params.p ) )
+                try
+                {
+                    const polygons = JSON.parse( decodeURIComponent( params.p ) )
+                    this.props.initPolygons( polygons )
+                }
+                catch ( e )
+                {
+                    console.error( 'Badly formatted polygon' )
+                }
             }
+
         }
 
         componentWillReceiveProps( nextProps )
