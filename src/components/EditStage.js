@@ -130,12 +130,16 @@ class EditStage extends React.Component
             return this.addPoint( position )
         }
 
-        // check if we try to edit an existing polygon
-        const index = this.findPolygon( position )
+        // try to edit a polygon when holding the ctrl key
+        if ( e.ctrlKey )
+        {
+            // check if we try to edit an existing polygon
+            const index = this.findPolygon( position )
 
-        // if so, start editing this polygon
-        // otherwise reset selection
-        editPolygon( index >= 0 ? index : null )
+            // if so, start editing this polygon
+            // otherwise reset selection
+            editPolygon( index >= 0 ? index : null )
+        }
 
         this.addPoint( position )
     }
