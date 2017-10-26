@@ -9,6 +9,7 @@ export const editPolygon = createAction( 'EDIT_POLYGON' )
 export const addPolygon = createAction( 'ADD_POLYGON' )
 export const extendPolygon = createAction( 'EXTEND_POLYGON', ( index, points ) => [index, points] )
 export const replacePolygon = createAction( 'REPLACE_POLYGON', ( index, polygon ) => [index, polygon] )
+export const orderPolygon = createAction( 'ORDER_POLYGON', ( index, direction ) => [index, direction] )
 export const panZoom = createAction( 'PAN_ZOOM', ( pan, zoom ) => [pan, zoom] )
 
 
@@ -69,6 +70,34 @@ function handleReplacePolygon( state, action )
     } )
 }
 
+function handleOrderPolygon( state, action )
+{
+    const [index, direction] = action.payload
+    const replacedIndex = ( index + direction )
+
+    if ( replacedIndex === -1 || replacedIndex === state.polygons.length )
+    {
+        return state
+    }
+
+    const before = ( direction < 0 )
+
+    const ordered = state.polygons[index]
+    const replaced = state.polygons[replacedIndex]
+
+    const spliceArgs = [
+        before ? replacedIndex : index,
+        2,
+        before ? ordered : replaced,
+        before ? replaced : ordered
+    ]
+
+    return update( state, {
+        editedPolygon: { $set: replacedIndex },
+        polygons: { $splice: [spliceArgs] }
+    } )
+}
+
 function handlePanZoom( state, action )
 {
     const [pan, zoom] = action.payload
@@ -95,6 +124,7 @@ const reducerMap =
     [addPolygon]: handleAddPolygon,
     [extendPolygon]: handleExtendPolygon,
     [replacePolygon]: handleReplacePolygon,
+    [orderPolygon]: handleOrderPolygon,
     [panZoom]: handlePanZoom
 }
 

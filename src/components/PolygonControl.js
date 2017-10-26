@@ -63,6 +63,10 @@ class PolygonControl extends React.Component
         this.props.onChange( rotatedPolygon )
     }
 
+    handleOrder = ( direction ) => ( e ) => {
+        this.props.onOrder( direction )
+    }
+
     handleMove = ( e, delta ) => {
         const points = this.props.points.map(
             point => move( point, snapToGrid( scale( delta, 1/this.props.zoom ) ) )
@@ -113,6 +117,8 @@ class PolygonControl extends React.Component
                     <Toolbox style={ this.toolboxPosition() }>
                         <button onClick={ this.handleRotate( +1 ) }>+90°</button>
                         <button onClick={ this.handleRotate( -1 ) }>-90°</button>
+                        <button onClick={ this.handleOrder( +1 ) }>UP</button>
+                        <button onClick={ this.handleOrder( -1 ) }>DOWN</button>
                     </Toolbox>
                 ), this.portal ) }
 

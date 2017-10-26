@@ -34,6 +34,10 @@ class MoveStage extends React.Component
         }
     }
 
+    orderPolygon = ( direction ) => {
+        this.props.orderPolygon( this.props.editedPolygon, direction )
+    }
+
     handleRightClick = ( e ) => {
         e.preventDefault()
         this.props.editPolygon( null )
@@ -69,7 +73,8 @@ class MoveStage extends React.Component
                         pan={ pan }
                         zoom={ zoom }
                         points={ polygons[editedPolygon] }
-                        onChange={ this.updatePolygon } />
+                        onChange={ this.updatePolygon }
+                        onOrder={ this.orderPolygon }/>
                 ) }
 
             </Stage>
