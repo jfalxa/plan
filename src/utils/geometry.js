@@ -42,6 +42,15 @@ export function project( position, pan, zoom )
 }
 
 
+export function unproject( position, pan, zoom )
+{
+    return [
+        ( position[0] - pan[0] ) * zoom,
+        ( position[1] - pan[1] ) * zoom
+    ]
+}
+
+
 export function edge( index, polygon )
 {
     return [polygon[index], polygon[(index+1) % polygon.length]]
@@ -51,6 +60,42 @@ export function edge( index, polygon )
 export function clockwise( polygon )
 {
     return isClockwise( polygon ) ? polygon : [...polygon].reverse()
+}
+
+
+export function centroid( polygon )
+{
+    const len = polygon.length
+
+    const sum = polygon.reduce( ( sum, point ) => [
+        sum[0] + point[0],
+        sum[1] + point[1]
+    ], [0, 0] )
+
+    return [sum[0] / len, sum[1] / len]
+}
+
+
+export function rotate90( polygon, direction )
+{
+    const [cx, cy] = centroid( polygon )
+
+    return polygon.map( ( [x, y] ) => [
+        -direction * ( y - cy ) + cx,
+        direction * ( x - cx ) + cy
+    ] )
+}
+
+
+export function topLeft( polygon )
+{
+    const xs = polygon.map( point => point[0] )
+    const ys = polygon.map( point => point[1] )
+
+    const x = Math.min( ...xs )
+    const y = Math.min( ...ys )
+
+    return [x, y]
 }
 
 
