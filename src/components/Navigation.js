@@ -64,6 +64,15 @@ class Navigation extends React.Component
         return ( this.props.location.pathname === route )
     }
 
+    resetViewport = () => {
+        this.props.panZoom( [0, 0], 1 )
+    }
+
+    clearStage = () => {
+        this.props.reset()
+        this.resetViewport()
+    }
+
     handleKeyDown = ( e ) => {
         // toggle path when SPACE is pressed
         if ( e.key === ' ' )
@@ -75,16 +84,14 @@ class Navigation extends React.Component
 
     render()
     {
-        const { panZoom, reset } = this.props
-
         return (
             <NavContainer>
                 <LinkContainer>
                     <ToggleLink to="/" active={ this.isActive( '/' ) }>EDIT</ToggleLink>
                     <ToggleLink to="/move" active={ this.isActive( '/move' ) }>MOVE</ToggleLink>
                 </LinkContainer>
-                <RoundButton title="Clear stage" href='#' onClick={ reset }>X</RoundButton>
-                <RoundButton title="Reset viewport" href='#' onClick={ () => panZoom( [0, 0], 1 ) }>R</RoundButton>
+                <RoundButton title="Clear stage" href='#' onClick={ this.clearStage }>X</RoundButton>
+                <RoundButton title="Reset viewport" href='#' onClick={ this.resetViewport }>R</RoundButton>
                 <RoundButton title="Show help" href="#" onClick={ help }>?</RoundButton>
             </NavContainer>
         );
