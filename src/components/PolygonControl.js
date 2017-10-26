@@ -60,7 +60,8 @@ class PolygonControl extends React.Component
 
     handleRotate = ( direction ) => ( e ) => {
         const rotatedPolygon = rotate90( this.state.points, direction )
-        this.props.onChange( rotatedPolygon )
+        const polygon = rotatedPolygon.map( snapToGrid )
+        this.props.onChange( polygon )
     }
 
     handleOrder = ( direction ) => ( e ) => {
