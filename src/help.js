@@ -9,7 +9,7 @@ function help()
 # EDIT
 - click on an empty space to start a new polygon
 - click on the first point of a new polygon to close it
-- click on an existing polygon edge to start editing it
+- hold CTRL and click on an existing polygon edge to start editing it
 - hold shift while drawing to build straight lines
 - right click while editing to remove the last added point
 - right click on a polygon point to remove it
