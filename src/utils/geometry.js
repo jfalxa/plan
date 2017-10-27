@@ -154,6 +154,16 @@ export function isClockwise( polygon )
 
 function findPath( first, last, polygon )
 {
+    if ( isEqual( first, last ) )
+    {
+        const i = polygon.findIndex( point => isEqual( first, point ) )
+
+        return [
+            ...polygon.slice( i + 1 ),
+            ...polygon.slice( 0, i )
+        ]
+    }
+
     const path = []
 
     let i = 0
@@ -200,7 +210,6 @@ export function combinePolygons( a, b )
     // find the two paths that connect first to last on a
     const path = findPath( first, last, a )
     const reversePath = findPath( first, last, reverseA )
-
 
     const pathArea = Math.abs( polygonArea( [...path, ...reverseB] ) )
     const reversePathArea = Math.abs( polygonArea( [...reversePath, ...reverseB] ) )
