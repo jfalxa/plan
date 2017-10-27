@@ -37,7 +37,7 @@ class EditStage extends React.Component
         if ( points.length <= 1 )
         {
             this.resetStage()
-            this.props.editPolygon( null )
+            this.editPolygon( null )
         }
         else
         {
@@ -59,6 +59,12 @@ class EditStage extends React.Component
     {
         this.props.extendPolygon( index, points )
         this.resetStage()
+    }
+
+    editPolygon( index, position )
+    {
+        this.props.editPolygon( index )
+        position && this.addPoint( position )
     }
 
     removePolygonPoint( polygonIndex, pointIndex )
@@ -107,38 +113,51 @@ class EditStage extends React.Component
 
     handleClick = ( e ) => {
         const { position, points } = this.state
-        const { editedPolygon, polygons, editPolygon } = this.props
+        const { editedPolygon, polygons } = this.props
+
+        const hasPoints = ( points.length > 0 )
+        const isPolygonEdited = !isNull( editedPolygon )
+        const isPolygonClicked = isPolygonEdited
+            ? isOnPolygon( position, polygons[editedPolygon] )
+            : false;
 
         // ignore clicking many times in a row at the same position
-        if ( !position || ( points.length > 0 && isEqual( position, last( points ) ) ) )
+        if ( !position || ( hasPoints && isEqual( position, last( points ) ) ) )
         {
             return
         }
-        // if a polygon is being edited and the click is made again on the polygon edge
-        else if ( !isNull( editedPolygon ) && isOnPolygon( position, polygons[editedPolygon] ) && points.length > 0 )
+        else if ( isPolygonEdited )
         {
-            return this.extendPolygon( editedPolygon, [...points, position] )
+            // when a polygon is being edited and user clicks again on it
+            if ( hasPoints && isPolygonClicked )
+            {
+                // add the new path to the existing polygon
+                return this.extendPolygon( editedPolygon, [...points, position] )
+            }
+            // when a polygon is being edited but user starts creating a new one outside
+            else if ( !isPolygonClicked && !hasPoints )
+            {
+                // reset selection and start a new polygon at this position
+                return this.editPolygon( null, position )
+            }
         }
-        // if the click is on the starting point, close the polygon
-        else if ( isFirstPoint( position, points ) )
+        else
         {
-            return this.addPolygon( points )
-        }
-        // or simply add a new point to the current polygon
-        else if ( points.length > 0 )
-        {
-            return this.addPoint( position )
-        }
+            // when user clicks on the first point of a newly created polygon
+            if ( isFirstPoint( position, points ) )
+            {
+                // close it and add it to the list
+                return this.addPolygon( points )
+            }
+            else if ( e.ctrlKey )
+            {
+                // check if we try to edit an existing polygon
+                const index = this.findPolygon( position )
 
-        // try to edit a polygon when holding the ctrl key
-        if ( e.ctrlKey )
-        {
-            // check if we try to edit an existing polygon
-            const index = this.findPolygon( position )
-
-            // if so, start editing this polygon
-            // otherwise reset selection
-            editPolygon( index >= 0 ? index : null )
+                // if so, start editing this polygon
+                // otherwise reset selection
+                return this.editPolygon( index >= 0 ? index : null, position )
+            }
         }
 
         this.addPoint( position )
