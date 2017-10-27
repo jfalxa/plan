@@ -1,4 +1,5 @@
 import update from 'immutability-helper'
+import undoable, { excludeAction } from 'redux-undo';
 import { createAction, handleActions } from 'redux-actions'
 
 import { clockwise, combinePolygons } from '../utils/geometry'
@@ -128,4 +129,7 @@ const reducerMap =
     [panZoom]: handlePanZoom
 }
 
-export default handleActions( reducerMap, initialState )
+const stageReducer = handleActions( reducerMap, initialState )
+const undoExclude = [initPolygons, panZoom].map( action => action.toString() )
+
+export default undoable( stageReducer, { filter: excludeAction( undoExclude ) } );
