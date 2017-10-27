@@ -28,7 +28,7 @@ const PositionControl = withMovement( ( { points, movement, onMove, onMoveEnd } 
 const Toolbox = styled( 'div' )`
     position: absolute;
     flexDirection: 'row';
-    margin-top: -50px;
+    margin-top: -65px;
 `
 
 class PolygonControl extends React.Component
@@ -118,8 +118,8 @@ class PolygonControl extends React.Component
                     <Toolbox style={ this.toolboxPosition() }>
                         <button onClick={ this.handleRotate( +1 ) }>+90°</button>
                         <button onClick={ this.handleRotate( -1 ) }>-90°</button>
-                        <button onClick={ this.handleOrder( +1 ) }>UP</button>
-                        <button onClick={ this.handleOrder( -1 ) }>DOWN</button>
+                        <button onClick={ this.handleOrder( +1 ) }>Forward</button>
+                        <button onClick={ this.handleOrder( -1 ) }>Backward</button>
                     </Toolbox>
                 ), this.portal ) }
 

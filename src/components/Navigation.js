@@ -101,14 +101,14 @@ class Navigation extends React.Component
         return (
             <NavContainer>
                 <LinkContainer>
-                    <ToggleLink to="/" active={ this.isActive( '/' ) }>EDIT</ToggleLink>
+                    <ToggleLink to="/" active={ this.isActive( '/' ) }>DRAW</ToggleLink>
                     <ToggleLink to="/move" active={ this.isActive( '/move' ) }>MOVE</ToggleLink>
                 </LinkContainer>
                 <RoundButton title="Clear stage" href='#' onClick={ this.clearStage }>X</RoundButton>
                 <RoundButton title="Reset viewport" href='#' onClick={ this.resetViewport }>R</RoundButton>
+                <RoundButton title="Undo (ctrl-z)" href="#" onClick={ undo }>↶</RoundButton>
+                <RoundButton title="Redo (ctrl-y)" href="#" onClick={ redo }>↷</RoundButton>
                 <RoundButton title="Show help" href="#" onClick={ help }>?</RoundButton>
-                <RoundButton title="Undo" href="#" onClick={ undo }>↶</RoundButton>
-                <RoundButton title="Redo" href="#" onClick={ redo }>↷</RoundButton>
             </NavContainer>
         );
     }
