@@ -3,6 +3,7 @@ import compose from 'lodash/flowRight'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { parse } from 'query-string'
+import { ActionCreators } from 'redux-undo';
 
 import { initPolygons, panZoom } from '../reducers/stage'
 
@@ -54,9 +55,16 @@ function withURLState( Component )
 }
 
 
+const actionCreators = {
+    panZoom,
+    initPolygons,
+    undo: ActionCreators.undo,
+    redo: ActionCreators.redo
+}
+
 const withStage = connect(
-    state => state.stage,
-    { initPolygons, panZoom }
+    state => state.stage.present,
+    actionCreators
 )
 
 

@@ -84,6 +84,8 @@ class Navigation extends React.Component
 
     render()
     {
+        const { undo, redo } = this.props;
+
         return (
             <NavContainer>
                 <LinkContainer>
@@ -93,6 +95,8 @@ class Navigation extends React.Component
                 <RoundButton title="Clear stage" href='#' onClick={ this.clearStage }>X</RoundButton>
                 <RoundButton title="Reset viewport" href='#' onClick={ this.resetViewport }>R</RoundButton>
                 <RoundButton title="Show help" href="#" onClick={ help }>?</RoundButton>
+                <RoundButton title="Undo" href="#" onClick={ undo }>↶</RoundButton>
+                <RoundButton title="Redo" href="#" onClick={ redo }>↷</RoundButton>
             </NavContainer>
         );
     }

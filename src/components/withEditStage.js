@@ -4,7 +4,7 @@ import { editPolygon, addPolygon, replacePolygon, extendPolygon, panZoom } from 
 
 function mapStateToProps( state )
 {
-    return state.stage
+    return state.stage.present
 }
 
 const actionCreators =
