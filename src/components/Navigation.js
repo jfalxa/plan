@@ -65,7 +65,10 @@ class Navigation extends React.Component
     }
 
     resetViewport = () => {
-        this.props.panZoom( [0, 0], 1 )
+        const width = -(document.body.offsetWidth / 2);
+        const height =  -(document.body.offsetHeight / 2);
+
+        this.props.panZoom( [width, height], 1 )
     }
 
     clearStage = () => {
