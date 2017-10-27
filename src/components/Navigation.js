@@ -74,11 +74,23 @@ class Navigation extends React.Component
     }
 
     handleKeyDown = ( e ) => {
-        // toggle path when SPACE is pressed
+        const { history, undo, redo } = this.props;
+
         if ( e.key === ' ' )
         {
             const route = this.isActive( '/' ) ? '/move' : '/'
-            this.props.history.push( route )
+            history.push( route )
+        }
+        else if ( e.ctrlKey )
+        {
+            if ( e.key === 'z' )
+            {
+                undo();
+            }
+            else if ( e.key === 'y' )
+            {
+                redo();
+            }
         }
     }
 
