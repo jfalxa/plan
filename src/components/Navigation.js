@@ -95,6 +95,13 @@ class Navigation extends React.Component
                 redo();
             }
         }
+        else if ( e.shiftKey )
+        {
+            if (e.key === '?')
+            {
+                help();
+            }
+        }
     }
 
     render()
