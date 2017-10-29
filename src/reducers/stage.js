@@ -108,12 +108,13 @@ function handlePanZoom( state, action )
     } )
 }
 
-
+const width = -(document.body.offsetWidth / 2)
+const height =  -(document.body.offsetHeight / 2)
 const initialState =
 {
     editedPolygon: null,
     polygons: [],
-    pan: [0, 0],
+    pan: [width, height],
     zoom: 1
 }
 
