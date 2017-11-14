@@ -1,11 +1,11 @@
 import React from 'react'
 import styled from 'react-emotion'
 import { Link } from 'react-router-dom'
+import { HotKeys } from 'react-hotkeys'
 
-import withURLState from './withURLState';
-
-
+import withURLState from './withURLState'
 import help from '../help'
+
 
 const NavContainer = styled( 'nav' )`
     position: absolute;
@@ -44,24 +44,27 @@ const RoundButton = styled( 'a' )`
     color: black;
     font-weight: bold;
     text-decoration: none;
+    cursor: pointer;
 `
-
 
 class Navigation extends React.Component
 {
-    componentDidMount()
-    {
-        document.addEventListener( 'keydown', this.handleKeyDown )
-    }
-
-    componentWillUnmount()
-    {
-        document.removeEventListener( 'keydown', this.handleKeyDown )
+    hotkeys = {
+        'space': () => this.toggleMode(),
+        'ctrl+z': this.props.undo,
+        'ctrl+y': this.props.redo,
+        '?': help
     }
 
     isActive( route )
     {
         return ( this.props.location.pathname === route )
+    }
+
+    toggleMode()
+    {
+        const route = this.isActive( '/' ) ? '/move' : '/'
+        this.props.history.push( route )
     }
 
     resetViewport = () => {
@@ -76,50 +79,24 @@ class Navigation extends React.Component
         this.resetViewport()
     }
 
-    handleKeyDown = ( e ) => {
-        const { history, undo, redo } = this.props;
-
-        if ( e.key === ' ' )
-        {
-            const route = this.isActive( '/' ) ? '/move' : '/'
-            history.push( route )
-        }
-        else if ( e.ctrlKey )
-        {
-            if ( e.key === 'z' )
-            {
-                undo();
-            }
-            else if ( e.key === 'y' )
-            {
-                redo();
-            }
-        }
-        else if ( e.shiftKey )
-        {
-            if (e.key === '?')
-            {
-                help();
-            }
-        }
-    }
-
     render()
     {
         const { undo, redo } = this.props;
 
         return (
-            <NavContainer>
-                <LinkContainer>
-                    <ToggleLink to="/" active={ this.isActive( '/' ) }>DRAW</ToggleLink>
-                    <ToggleLink to="/move" active={ this.isActive( '/move' ) }>MOVE</ToggleLink>
-                </LinkContainer>
-                <RoundButton title="Clear stage" href='#' onClick={ this.clearStage }>X</RoundButton>
-                <RoundButton title="Reset viewport" href='#' onClick={ this.resetViewport }>R</RoundButton>
-                <RoundButton title="Undo (ctrl-z)" href="#" onClick={ undo }>↶</RoundButton>
-                <RoundButton title="Redo (ctrl-y)" href="#" onClick={ redo }>↷</RoundButton>
-                <RoundButton title="Show help" href="#" onClick={ help }>?</RoundButton>
-            </NavContainer>
+            <HotKeys focused attach={ document } handlers={ this.hotkeys }>
+                <NavContainer>
+                    <LinkContainer>
+                        <ToggleLink to="/" active={ this.isActive( '/' ) }>DRAW</ToggleLink>
+                        <ToggleLink to="/move" active={ this.isActive( '/move' ) }>MOVE</ToggleLink>
+                    </LinkContainer>
+                    <RoundButton title="Clear stage" onClick={ this.clearStage }>X</RoundButton>
+                    <RoundButton title="Reset viewport" onClick={ this.resetViewport }>R</RoundButton>
+                    <RoundButton title="Undo (ctrl-z)" onClick={ undo }>↶</RoundButton>
+                    <RoundButton title="Redo (ctrl-y)" onClick={ redo }>↷</RoundButton>
+                    <RoundButton title="Show help" onClick={ help }>?</RoundButton>
+                </NavContainer>
+            </HotKeys>
         );
     }
 }
