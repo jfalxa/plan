@@ -1,6 +1,9 @@
 function help()
 {
     alert(`
+# SAVE
+Bookmark the current URL when you want to save
+
 # ALL
 - press SPACE to switch between modes
 - use your trackpad or drag your mouse around to move on the stage
