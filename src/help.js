@@ -1,6 +1,10 @@
 function help()
 {
     alert(`
+# SAVE / SHARE
+- bookmark the current URL to save your work
+- to share a state, send the current URL 
+
 # ALL
 - press SPACE to switch between modes
 - use your trackpad or drag your mouse around to move on the stage
