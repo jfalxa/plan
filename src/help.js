@@ -1,8 +1,9 @@
 function help()
 {
     alert(`
-# SAVE
-Bookmark the current URL when you want to save
+# SAVE / SHARE
+- bookmark the current URL to save your work
+- to share a state, send the current URL 
 
 # ALL
 - press SPACE to switch between modes
